@@ -5,7 +5,8 @@
   'use strict';
 
   /* --- Photo Data --- */
-  var PHOTO_DIR = '/photos/2026_51/';
+  var PHOTO_DIR = 'https://pub-c40b81a03e774e4fae8c2e6b28abcb92.r2.dev/2026_51/';
+  var EXIF_JSON_PATH = '/exif.json';
   var PHOTOS = [
     'IMG_20260425_181137.jpg',
     'IMG_20260427_111532.jpg',
@@ -45,7 +46,6 @@
   var exifCache = {};
   var locationCache = {};
   var gpsCache = {};
-  var exifPendingCount = 0;
   var mapInitialized = false;
 
   function buildGallery() {
@@ -70,17 +70,47 @@
     galleryImages = galleryItems.map(function (item) {
       return item.querySelector('.photo-wrapper img');
     });
-    exifPendingCount = galleryImages.length;
     galleryItems.forEach(function (item, index) {
       item.querySelector('.photo-wrapper').addEventListener('click', function () {
         openLightbox(index);
       });
-      preloadExif(galleryImages[index], index);
     });
+    loadExifData();
   }
 
-  function onExifComplete() {
-    exifPendingCount--;
+  function loadExifData() {
+    fetch(EXIF_JSON_PATH)
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        PHOTOS.forEach(function (filename, index) {
+          var info = data[filename];
+          if (!info) return;
+
+          var paramParts = [];
+          if (info.focalLength) paramParts.push(formatFocalLength(info.focalLength));
+          if (info.fNumber) paramParts.push(formatAperture(info.fNumber));
+          if (info.exposureTime) paramParts.push(formatExposureTime(info.exposureTime));
+          if (info.iso) paramParts.push('ISO ' + info.iso);
+
+          exifCache[index] = {
+            device: info.device || '',
+            params: paramParts.length > 0 ? paramParts.join('  ·  ') : '',
+            focalLength: info.focalLength || null,
+            fNumber: info.fNumber || null,
+            exposureTime: info.exposureTime || null,
+            iso: info.iso || null
+          };
+          renderCardInfo(index);
+
+          if (info.lat != null && info.lon != null) {
+            gpsCache[index] = { lat: info.lat, lon: info.lon };
+            reverseGeocode(info.lat, info.lon, index);
+          }
+        });
+      })
+      .catch(function (err) {
+        console.warn('Failed to load EXIF data:', err);
+      });
   }
 
   /* --- EXIF Helpers --- */
@@ -135,60 +165,6 @@
       .catch(function () {});
   }
 
-  function preloadExif(imageElement, index) {
-    if (typeof EXIF === 'undefined') { onExifComplete(); return; }
-    var img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function () {
-      EXIF.getData(img, function () {
-        var make = EXIF.getTag(this, 'Make') || '';
-        var model = EXIF.getTag(this, 'Model') || '';
-        var focalLength = EXIF.getTag(this, 'FocalLengthIn35mmFilm') || EXIF.getTag(this, 'FocalLength');
-        var fNumber = EXIF.getTag(this, 'FNumber');
-        var exposureTime = EXIF.getTag(this, 'ExposureTime');
-        var iso = EXIF.getTag(this, 'ISOSpeedRatings');
-
-        var deviceName = model || make;
-        if (make && model && model.indexOf(make) === -1) {
-          deviceName = make + ' ' + model;
-        }
-        deviceName = deviceName.trim();
-
-        var paramParts = [];
-        if (focalLength) paramParts.push(formatFocalLength(focalLength));
-        if (fNumber) paramParts.push(formatAperture(fNumber));
-        if (exposureTime) paramParts.push(formatExposureTime(exposureTime));
-        if (iso) paramParts.push('ISO ' + iso);
-
-        exifCache[index] = {
-          device: deviceName || '',
-          params: paramParts.length > 0 ? paramParts.join('  ·  ') : '',
-          focalLength: focalLength ? Math.round(focalLength) : null,
-          fNumber: fNumber ? Math.round(fNumber * 10) / 10 : null,
-          exposureTime: exposureTime || null,
-          iso: iso || null
-        };
-        renderCardInfo(index);
-
-        var gpsLatitude = EXIF.getTag(this, 'GPSLatitude');
-        var gpsLatitudeRef = EXIF.getTag(this, 'GPSLatitudeRef');
-        var gpsLongitude = EXIF.getTag(this, 'GPSLongitude');
-        var gpsLongitudeRef = EXIF.getTag(this, 'GPSLongitudeRef');
-
-        if (gpsLatitude && gpsLongitude) {
-          var lat = convertDMSToDecimal(gpsLatitude, gpsLatitudeRef);
-          var lon = convertDMSToDecimal(gpsLongitude, gpsLongitudeRef);
-          if (lat !== null && lon !== null) {
-            gpsCache[index] = { lat: lat, lon: lon };
-            reverseGeocode(lat, lon, index);
-          }
-        }
-        onExifComplete();
-      });
-    };
-    img.onerror = function () { onExifComplete(); };
-    img.src = imageElement.dataset.full || imageElement.dataset.src || imageElement.src;
-  }
 
   /* --- Photo Map --- */
 
