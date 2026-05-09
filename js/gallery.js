@@ -15,6 +15,7 @@
   let galleryImages = [];
   let currentIndex = 0;
   var exifCache = {};
+  var locationCache = {};
 
   function initGallery() {
     galleryImages = Array.from(document.querySelectorAll('.gallery-item img'));
@@ -45,6 +46,38 @@
     return 'ƒ/' + rounded;
   }
 
+  function convertDMSToDecimal(dmsArray, ref) {
+    if (!dmsArray || dmsArray.length < 3) return null;
+    var degrees = dmsArray[0];
+    var minutes = dmsArray[1];
+    var seconds = dmsArray[2];
+    var decimal = degrees + minutes / 60 + seconds / 3600;
+    if (ref === 'S' || ref === 'W') decimal = -decimal;
+    return decimal;
+  }
+
+  function reverseGeocode(latitude, longitude, index) {
+    var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' +
+      latitude + '&lon=' + longitude + '&zoom=10&accept-language=zh-CN';
+    fetch(url)
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        if (data && data.address) {
+          var address = data.address;
+          var parts = [];
+          var city = address.city || address.town || address.county || '';
+          var state = address.state || address.province || '';
+          if (state) parts.push(state);
+          if (city && city !== state) parts.push(city);
+          if (parts.length > 0) {
+            locationCache[index] = '📍 ' + parts.join(' · ');
+            showExif();
+          }
+        }
+      })
+      .catch(function () {});
+  }
+
   function preloadExif(imageElement, index) {
     if (typeof EXIF === 'undefined') return;
     var img = new Image();
@@ -72,15 +105,33 @@
         if (iso) parts.push('ISO ' + iso);
 
         exifCache[index] = parts.length > 0 ? parts.join('  ·  ') : '';
+
+        var gpsLatitude = EXIF.getTag(this, 'GPSLatitude');
+        var gpsLatitudeRef = EXIF.getTag(this, 'GPSLatitudeRef');
+        var gpsLongitude = EXIF.getTag(this, 'GPSLongitude');
+        var gpsLongitudeRef = EXIF.getTag(this, 'GPSLongitudeRef');
+
+        if (gpsLatitude && gpsLongitude) {
+          var lat = convertDMSToDecimal(gpsLatitude, gpsLatitudeRef);
+          var lon = convertDMSToDecimal(gpsLongitude, gpsLongitudeRef);
+          if (lat !== null && lon !== null) {
+            reverseGeocode(lat, lon, index);
+          }
+        }
       });
     };
     img.src = imageElement.dataset.full || imageElement.dataset.src || imageElement.src;
   }
 
   function showExif() {
-    var exifText = exifCache[currentIndex];
-    if (exifText) {
-      exifElement.textContent = exifText;
+    var exifText = exifCache[currentIndex] || '';
+    var locationText = locationCache[currentIndex] || '';
+    var displayText = exifText;
+    if (locationText) {
+      displayText = displayText ? displayText + '\n' + locationText : locationText;
+    }
+    if (displayText) {
+      exifElement.textContent = displayText;
       exifElement.classList.add('visible');
     } else {
       exifElement.textContent = '';

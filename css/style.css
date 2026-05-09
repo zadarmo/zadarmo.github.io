@@ -193,13 +193,15 @@ body {
 /* EXIF Info Bar */
 .lightbox-exif {
   position: absolute;
-  bottom: 20px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.3);
-  white-space: nowrap;
+  white-space: pre-line;
+  text-align: center;
+  line-height: 1.8;
   opacity: 0;
   transition: opacity 0.4s ease;
   font-variant-numeric: tabular-nums;
