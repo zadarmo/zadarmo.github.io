@@ -3,26 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zadarmo — Photography</title>
-  <meta name="description" content="A minimal photography portfolio by Zadarmo">
+  <title>走走停停</title>
+  <meta name="description" content="走走停停 — 摄影作品集">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
   <header class="site-header">
-    <h1 class="site-title">Zadarmo</h1>
+    <h1 class="site-title">走走停停</h1>
+    <nav class="view-switcher">
+      <button class="view-btn active" data-view="gallery" aria-label="Photos">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </button>
+      <button class="view-btn" data-view="map" aria-label="Map">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
+      <span class="view-divider"></span>
+      <button class="view-btn theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </nav>
   </header>
 
-  <main class="gallery">
-    <div class="gallery-item loading">
-      <img data-src="https://cdn.jsdelivr.net/gh/zadarmo/zadarmo.github.io@main/photos/IMG_20260502_120331.jpg" data-full="https://cdn.jsdelivr.net/gh/zadarmo/zadarmo.github.io@main/photos/IMG_20260502_120331.jpg" alt="Photo">
-    </div>
-    <div class="gallery-item loading">
-      <img data-src="/photos/222.jpg"
-        data-full="/photos/222.jpg" alt="Photo">
-    </div>
-  </main>
+  <!-- Gallery View -->
+  <div class="view view-gallery active">
+  <div class="sort-bar">
+    <button class="sort-btn" data-sort="focalLength">焦距</button>
+    <button class="sort-btn" data-sort="fNumber">光圈</button>
+    <button class="sort-btn" data-sort="exposureTime">快门</button>
+    <button class="sort-btn" data-sort="iso">ISO</button>
+  </div>
+  <main class="gallery"></main>
+  <footer class="site-footer">
+    <script>document.write(new Date().getFullYear())</script> 走走停停 — ALL RIGHTS RESERVED
+  </footer>
+  </div>
+
+  <!-- Map View -->
+  <div class="view view-map">
+    <div id="photo-map"></div>
+  </div>
 
   <!-- Lightbox -->
   <div class="lightbox-overlay">
@@ -34,11 +57,9 @@
     <span class="lightbox-exif"></span>
   </div>
 
-  <footer class="site-footer">
-    © 2024 ZADARMO — ALL RIGHTS RESERVED
-  </footer>
-
   <script src="/js/exif.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="/js/gallery.js"></script>
 </body>
 </html>
