@@ -723,6 +723,14 @@
     if (targetView) targetView.classList.add('active');
     if (targetBtn) targetBtn.classList.add('active');
 
+    // Hide gallery vlog banner when leaving gallery view
+    var vlogBanner = document.getElementById('vlog-banner');
+    if (vlogBanner && viewName !== 'gallery') {
+      vlogBanner.classList.remove('visible');
+    } else if (vlogBanner && viewName === 'gallery') {
+      updateVlogBanner();
+    }
+
     if (viewName === 'map') {
       if (!mapInitialized) {
         mapInitialized = true;
