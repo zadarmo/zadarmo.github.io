@@ -77,7 +77,19 @@ def extract_exif(filepath):
         lat = dms_to_decimal(gps_info[2], gps_info[1])
         lon = dms_to_decimal(gps_info[4], gps_info[3])
 
+    # 拍摄时间: DateTimeOriginal 优先，其次 DateTime
+    date_str = tags.get("DateTimeOriginal") or tags.get("DateTime") or ""
+    date_time = None
+    if date_str:
+        # EXIF 格式 "2026:04:25 18:11:37" → "2026-04-25T18:11:37"
+        try:
+            date_time = date_str.replace(":", "-", 2)  # 只替换前两个冒号(日期部分)
+        except Exception:
+            pass
+
     entry = {"device": device.strip()}
+    if date_time:
+        entry["dateTime"] = date_time
     if focal:
         entry["focalLength"] = round(focal)
     if fnumber:

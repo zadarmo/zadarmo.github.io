@@ -227,11 +227,13 @@ body.light-theme .sort-btn.active {
 .photo-info {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 10px 14px;
   min-height: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
   gap: 12px;
 }
 
@@ -244,25 +246,31 @@ body.light-theme .sort-btn.active {
   display: none;
 }
 
-.photo-info .info-exif {
-  font-size: 0.68rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
+.photo-info .info-left {
   flex: 1;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.photo-info .info-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.photo-info .info-device,
+.photo-info .info-params {
+  font-variant-numeric: tabular-nums;
+}
+
+.photo-info .info-params {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.photo-info .info-date {
+  font-variant-numeric: tabular-nums;
 }
 
 .photo-info .info-location {
-  font-size: 0.68rem;
   color: rgba(255, 255, 255, 0.55);
-  text-align: right;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
 /* Loading placeholder */
@@ -400,15 +408,22 @@ body.light-theme .sort-btn.active {
   opacity: 1;
 }
 
-.lightbox-exif .exif-info {
+.lightbox-exif .exif-device,
+.lightbox-exif .exif-params,
+.lightbox-exif .exif-date {
   color: rgba(255, 255, 255, 0.8);
-  white-space: nowrap;
+}
+
+/* Desktop: one line with · separators */
+.lightbox-exif .exif-device::after,
+.lightbox-exif .exif-params::after,
+.lightbox-exif .exif-date::after {
+  content: '  ·  ';
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .lightbox-exif .exif-location {
-  color: rgba(255, 255, 255, 0.65);
-  white-space: nowrap;
-  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 /* --- Photo Map --- */
@@ -510,6 +525,27 @@ body.light-theme .sort-btn.active {
   .gallery-item {
     margin-bottom: 8px;
   }
+  /* Card info: stack on tablets */
+  .photo-info {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .photo-info .info-right {
+    text-align: left;
+  }
+  /* Lightbox EXIF: stack on mobile */
+  .lightbox-exif .exif-device,
+  .lightbox-exif .exif-params,
+  .lightbox-exif .exif-date,
+  .lightbox-exif .exif-location {
+    display: block;
+    text-align: center;
+  }
+  .lightbox-exif .exif-device::after,
+  .lightbox-exif .exif-params::after,
+  .lightbox-exif .exif-date::after {
+    content: '';
+  }
 }
 
 @media (max-width: 540px) {
@@ -524,6 +560,21 @@ body.light-theme .sort-btn.active {
   .site-header {
     padding: 20px 16px;
   }
+  /* Sort bar: smaller on mobile */
+  .sort-bar {
+    gap: 6px;
+    padding: 66px 8px 0;
+  }
+  .sort-btn {
+    font-size: 0.66rem;
+    padding: 4px 10px;
+  }
+  /* Card info */
+  .photo-info {
+    padding: 8px 10px;
+    font-size: 0.64rem;
+  }
+  /* Lightbox */
   .lightbox-nav {
     font-size: 1.8rem;
     padding: 14px;
@@ -533,6 +584,18 @@ body.light-theme .sort-btn.active {
   }
   .lightbox-next {
     right: 4px;
+  }
+  .lightbox-counter {
+    bottom: 70px;
+    font-size: 0.68rem;
+  }
+  .lightbox-exif {
+    bottom: 10px;
+    padding: 6px 12px;
+    max-width: 96vw;
+    font-size: 0.64rem;
+    gap: 2px;
+    border-radius: 4px;
   }
 }
 
@@ -586,12 +649,16 @@ body.light-theme .photo-wrapper img {
   filter: none;
 }
 
-body.light-theme .photo-info .info-exif {
+body.light-theme .photo-info {
   color: rgba(0, 0, 0, 0.6);
 }
 
+body.light-theme .photo-info .info-params {
+  color: rgba(0, 0, 0, 0.4);
+}
+
 body.light-theme .photo-info .info-location {
-  color: rgba(0, 0, 0, 0.45);
+  color: rgba(0, 0, 0, 0.4);
 }
 
 body.light-theme .gallery-item.loading .photo-wrapper {

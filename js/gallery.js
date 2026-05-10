@@ -110,6 +110,7 @@
           exifCache[index] = {
             device: info.device || '',
             params: paramParts.length > 0 ? paramParts.join('  ·  ') : '',
+            dateTime: info.dateTime || null,
             focalLength: info.focalLength || null,
             fNumber: info.fNumber || null,
             exposureTime: info.exposureTime || null,
@@ -149,6 +150,14 @@
     if (!value) return null;
     var rounded = Math.round(value * 10) / 10;
     return 'ƒ/' + rounded;
+  }
+
+  function formatDateTime(value) {
+    if (!value) return null;
+    // "2026-04-25T18:11:37" or "2026-04-25 18:11:37" → "2026.04.25 18:11"
+    var match = value.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
+    if (!match) return null;
+    return match[1] + '.' + match[2] + '.' + match[3] + ' ' + match[4] + ':' + match[5];
   }
 
   /* --- Photo Map --- */
@@ -267,18 +276,17 @@
     var device = exifData.device || '';
     var params = exifData.params || '';
 
-    if (!device && !params && !locationText) return;
+    var dateTimeText = formatDateTime(exifData.dateTime) || '';
 
-    var html = '';
-    var exifParts = [];
-    if (device) exifParts.push(device);
-    if (params) exifParts.push(params);
-    if (exifParts.length > 0) {
-      html += '<div class="info-exif">' + exifParts.join('  ·  ') + '</div>';
-    }
-    if (locationText) {
-      html += '<div class="info-location">' + locationText + '</div>';
-    }
+    if (!device && !params && !locationText && !dateTimeText) return;
+
+    var html = '<div class="info-left">';
+    if (device) html += '<div class="info-device">' + device + '</div>';
+    if (params) html += '<div class="info-params">' + params + '</div>';
+    html += '</div><div class="info-right">';
+    if (dateTimeText) html += '<div class="info-date">' + dateTimeText + '</div>';
+    if (locationText) html += '<div class="info-location">' + locationText + '</div>';
+    html += '</div>';
     infoElement.innerHTML = html;
     infoElement.classList.add('visible');
   }
@@ -288,24 +296,19 @@
     var locationText = locationCache[currentIndex] || '';
     var device = exifData.device || '';
     var params = exifData.params || '';
+    var dateTimeText = formatDateTime(exifData.dateTime) || '';
 
-    if (!device && !params && !locationText) {
+    if (!device && !params && !locationText && !dateTimeText) {
       exifElement.innerHTML = '';
       exifElement.classList.remove('visible');
       return;
     }
 
-    var exifParts = [];
-    if (device) exifParts.push(device);
-    if (params) exifParts.push(params);
-
     var html = '';
-    if (exifParts.length > 0) {
-      html += '<span class="exif-info">' + exifParts.join('  ·  ') + '</span>';
-    }
-    if (locationText) {
-      html += '<span class="exif-location">' + locationText + '</span>';
-    }
+    if (device) html += '<span class="exif-device">' + device + '</span>';
+    if (params) html += '<span class="exif-params">' + params + '</span>';
+    if (dateTimeText) html += '<span class="exif-date">' + dateTimeText + '</span>';
+    if (locationText) html += '<span class="exif-location">' + locationText + '</span>';
     exifElement.innerHTML = html;
     exifElement.classList.add('visible');
   }
@@ -472,7 +475,9 @@
       if (a.value == null && b.value == null) return 0;
       if (a.value == null) return 1;
       if (b.value == null) return -1;
-      var diff = a.value - b.value;
+      var diff = (typeof a.value === 'string')
+        ? a.value.localeCompare(b.value)
+        : a.value - b.value;
       return direction === 'desc' ? -diff : diff;
     });
 
