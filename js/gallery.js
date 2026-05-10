@@ -13,30 +13,7 @@
   var LOCAL_THUMB_DIR = '/photo/2026_51/thumbnails/';
   var LOCAL_FULL_DIR = '/photo/2026_51/compressed/';
   var EXIF_JSON_PATH = '/exif.json';
-  var PHOTOS = [
-    'IMG_20260425_181137.jpg',
-    'IMG_20260427_111532.jpg',
-    'IMG_20260427_113259.jpg',
-    'IMG_20260427_131821.jpg',
-    'IMG_20260427_174715.jpg',
-    'IMG_20260427_213441.jpg',
-    'IMG_20260428_195228.jpg',
-    'IMG_20260429_045357.jpg',
-    'IMG_20260429_151701.jpg',
-    'IMG_20260429_160256.jpg',
-    'IMG_20260430_105946.jpg',
-    'IMG_20260430_165743.jpg',
-    'IMG_20260430_170353.jpg',
-    'IMG_20260430_200835.jpg',
-    'IMG_20260501_131956.jpg',
-    'IMG_20260501_161327.jpg',
-    'IMG_20260501_172029.jpg',
-    'IMG_20260501_182117.jpg',
-    'IMG_20260502_120331.jpg',
-    'IMG_20260502_144902.jpg',
-    'IMG_20260502_152453.jpg',
-    'IMG_20260502_170815_1.jpg'
-  ];
+  var PHOTOS = [];
 
   const overlay = document.querySelector('.lightbox-overlay');
   const lightboxImage = overlay.querySelector('.lightbox-image');
@@ -64,11 +41,61 @@
     return USE_LOCAL_IMAGES ? LOCAL_FULL_DIR + filename : REMOTE_DIR + filename;
   }
 
+  function loadDataAndBuild() {
+    fetch(EXIF_JSON_PATH)
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        // Dynamic photo list from exif.json keys
+        PHOTOS = Object.keys(data).sort();
+
+        // Parse EXIF data
+        PHOTOS.forEach(function (filename, index) {
+          var info = data[filename];
+          if (!info) return;
+
+          var paramParts = [];
+          if (info.focalLength) paramParts.push(formatFocalLength(info.focalLength));
+          if (info.fNumber) paramParts.push(formatAperture(info.fNumber));
+          if (info.exposureTime) paramParts.push(formatExposureTime(info.exposureTime));
+          if (info.iso) paramParts.push('ISO ' + info.iso);
+
+          exifCache[index] = {
+            device: info.device || '',
+            params: paramParts.length > 0 ? paramParts.join('  ·  ') : '',
+            dateTime: info.dateTime || null,
+            focalLength: info.focalLength || null,
+            fNumber: info.fNumber || null,
+            exposureTime: info.exposureTime || null,
+            iso: info.iso || null
+          };
+
+          if (info.location) {
+            locationCache[index] = info.location;
+          }
+
+          if (info.lat != null && info.lon != null) {
+            gpsCache[index] = { lat: info.lat, lon: info.lon };
+          }
+        });
+
+        // Build gallery after data is ready
+        buildGallery();
+        initGallery();
+        initLazyLoad();
+        // Render card info after galleryItems is populated
+        PHOTOS.forEach(function (_, index) { renderCardInfo(index); });
+        buildFilterBar();
+      })
+      .catch(function (err) {
+        console.warn('Failed to load EXIF data:', err);
+      });
+  }
+
   function buildGallery() {
     var container = document.querySelector('.gallery');
     if (!container) return;
 
-    PHOTOS.forEach(function (filename) {
+    PHOTOS.forEach(function (filename, index) {
       var thumbSrc = getThumbSrc(filename);
       var fullSrc = getFullSrc(filename);
       var item = document.createElement('div');
@@ -92,48 +119,6 @@
         openLightbox(index);
       });
     });
-    loadExifData();
-  }
-
-  function loadExifData() {
-    fetch(EXIF_JSON_PATH)
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        PHOTOS.forEach(function (filename, index) {
-          var info = data[filename];
-          if (!info) return;
-
-          var paramParts = [];
-          if (info.focalLength) paramParts.push(formatFocalLength(info.focalLength));
-          if (info.fNumber) paramParts.push(formatAperture(info.fNumber));
-          if (info.exposureTime) paramParts.push(formatExposureTime(info.exposureTime));
-          if (info.iso) paramParts.push('ISO ' + info.iso);
-
-          exifCache[index] = {
-            device: info.device || '',
-            params: paramParts.length > 0 ? paramParts.join('  ·  ') : '',
-            dateTime: info.dateTime || null,
-            focalLength: info.focalLength || null,
-            fNumber: info.fNumber || null,
-            exposureTime: info.exposureTime || null,
-            iso: info.iso || null
-          };
-          renderCardInfo(index);
-
-          if (info.location) {
-            locationCache[index] = info.location;
-            renderCardInfo(index);
-          }
-
-          if (info.lat != null && info.lon != null) {
-            gpsCache[index] = { lat: info.lat, lon: info.lon };
-          }
-        });
-        buildFilterBar();
-      })
-      .catch(function (err) {
-        console.warn('Failed to load EXIF data:', err);
-      });
   }
 
   /* --- EXIF Helpers --- */
@@ -600,9 +585,10 @@
     // Clear filters
     activeCountries = [];
     activeRegions = [];
-    document.querySelectorAll('.filter-tag').forEach(function (btn) {
+    document.querySelectorAll('#filter-country .filter-tag').forEach(function (btn) {
       btn.classList.remove('active');
     });
+    updateRegionTags();
 
     // Show all & restore original order
     galleryItems.forEach(function (el) { el.style.display = ''; });
@@ -654,19 +640,28 @@
     };
   }
 
+  // Build a lookup: country → { region → count }
+  var countryRegionMap = {};
+
   function buildFilterBar() {
     var countryRow = document.getElementById('filter-country');
     var regionRow = document.getElementById('filter-region');
     if (!countryRow || !regionRow) return;
 
     var countryCount = {};
-    var regionCount = {};
-    // Map each photo index to its parsed location
+    countryRegionMap = {};
+
     Object.keys(locationCache).forEach(function (key) {
       var parsed = parseLocation(locationCache[key]);
       if (!parsed) return;
-      if (parsed.country) countryCount[parsed.country] = (countryCount[parsed.country] || 0) + 1;
-      if (parsed.region) regionCount[parsed.region] = (regionCount[parsed.region] || 0) + 1;
+      if (parsed.country) {
+        countryCount[parsed.country] = (countryCount[parsed.country] || 0) + 1;
+        if (!countryRegionMap[parsed.country]) countryRegionMap[parsed.country] = {};
+        if (parsed.region) {
+          countryRegionMap[parsed.country][parsed.region] =
+            (countryRegionMap[parsed.country][parsed.region] || 0) + 1;
+        }
+      }
     });
 
     // Build country tags
@@ -679,24 +674,48 @@
     });
     countryRow.innerHTML = html;
 
-    // Build region tags
-    var regions = Object.keys(regionCount).sort();
-    html = '';
-    regions.forEach(function (r) {
-      html += '<button class="filter-tag" data-value="' + r + '">' +
+    // Bind country events
+    countryRow.querySelectorAll('.filter-tag').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.classList.toggle('active');
+        activeCountries = collectActive(countryRow);
+        activeRegions = [];
+        updateRegionTags();
+        applyFilter();
+      });
+    });
+
+    // Initial region tags (show all)
+    updateRegionTags();
+  }
+
+  function updateRegionTags() {
+    var regionRow = document.getElementById('filter-region');
+    if (!regionRow) return;
+
+    var regionCount = {};
+    var sourceCountries = activeCountries.length > 0
+      ? activeCountries
+      : Object.keys(countryRegionMap);
+
+    sourceCountries.forEach(function (c) {
+      var regions = countryRegionMap[c] || {};
+      Object.keys(regions).forEach(function (r) {
+        regionCount[r] = (regionCount[r] || 0) + regions[r];
+      });
+    });
+
+    var regionKeys = Object.keys(regionCount).sort();
+    var html = '';
+    regionKeys.forEach(function (r) {
+      var isActive = activeRegions.indexOf(r) !== -1;
+      html += '<button class="filter-tag' + (isActive ? ' active' : '') + '" data-value="' + r + '">' +
         '<span class="ft-label">' + r + '</span>' +
         '<span class="ft-count">' + regionCount[r] + '</span></button>';
     });
     regionRow.innerHTML = html;
 
-    // Bind events
-    countryRow.querySelectorAll('.filter-tag').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        btn.classList.toggle('active');
-        activeCountries = collectActive(countryRow);
-        applyFilter();
-      });
-    });
+    // Rebind region events
     regionRow.querySelectorAll('.filter-tag').forEach(function (btn) {
       btn.addEventListener('click', function () {
         btn.classList.toggle('active');
@@ -773,11 +792,9 @@
   // --- Init ---
   function boot() {
     applyAutoTheme();
-    buildGallery();
-    initLazyLoad();
     initViewSwitcher();
     initSortBar();
-    setTimeout(initGallery, 100);
+    loadDataAndBuild();
   }
 
   document.addEventListener('DOMContentLoaded', boot);

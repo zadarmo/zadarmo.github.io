@@ -1,4 +1,316 @@
 {
+  "DSCF4094(1).JPG": {
+    "device": "FUJIFILM X-T5",
+    "dateTime": "2025-10-06 16:09:02",
+    "focalLength": 59,
+    "fNumber": 3.6,
+    "exposureTime": 0.017857142857142856,
+    "iso": 250
+  },
+  "IMG_20251006_064812.jpg": {
+    "device": "",
+    "dateTime": "2025-10-06 06:48:12"
+  },
+  "IMG_20251006_173056.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-06 17:30:14",
+    "focalLength": 71,
+    "fNumber": 1.6,
+    "exposureTime": 0.0002,
+    "iso": 72,
+    "lat": 41.90165,
+    "lon": 12.463558,
+    "location": "📍 意大利 · 拉齐奥大区 · 博尔戈"
+  },
+  "IMG_20251007_111902.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-07 11:19:02",
+    "focalLength": 23,
+    "fNumber": 1.6,
+    "exposureTime": 0.001616,
+    "iso": 71,
+    "lat": 41.898922,
+    "lon": 12.476261,
+    "location": "📍 意大利 · 拉齐奥大区 · 帕里奥内"
+  },
+  "IMG_20251008_184221.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-08 18:34:58",
+    "focalLength": 92,
+    "fNumber": 2.7,
+    "exposureTime": 0.01,
+    "iso": 138,
+    "lat": 44.100717,
+    "lon": 9.736183,
+    "location": "📍 意大利 · 利古里亞 · 五漁村國家公園"
+  },
+  "IMG_20251008_184438.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-08 18:36:29",
+    "focalLength": 50,
+    "fNumber": 2.8,
+    "exposureTime": 0.0026,
+    "iso": 71,
+    "lat": 44.100339,
+    "lon": 9.736453,
+    "location": "📍 意大利 · 利古里亞 · Area marina protetta Cinque Terre"
+  },
+  "IMG_20251008_200314.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-08 15:41:20",
+    "focalLength": 54,
+    "fNumber": 1.6,
+    "exposureTime": 0.0001,
+    "iso": 71,
+    "lat": 44.106364,
+    "lon": 9.727517,
+    "location": "📍 意大利 · 利古里亞 · 五漁村國家公園"
+  },
+  "IMG_20251008_202320.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-08 15:52:42",
+    "focalLength": 23,
+    "fNumber": 2.8,
+    "exposureTime": 0.0003,
+    "iso": 72,
+    "lat": 44.107408,
+    "lon": 9.725925,
+    "location": "📍 意大利 · 利古里亞 · Area marina protetta Cinque Terre"
+  },
+  "IMG_20251008_204936.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-08 17:23:23",
+    "focalLength": 28,
+    "fNumber": 1.6,
+    "exposureTime": 0.0007,
+    "iso": 72,
+    "lat": 44.107025,
+    "lon": 9.728839,
+    "location": "📍 意大利 · 利古里亞 · 五漁村國家公園"
+  },
+  "IMG_20251011_160841.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-11 14:35:56",
+    "focalLength": 49,
+    "fNumber": 1.6,
+    "exposureTime": 0.0001,
+    "iso": 72,
+    "lat": 45.985422,
+    "lon": 9.259653,
+    "location": "📍 意大利 · 伦巴第 · Tambogruppe"
+  },
+  "IMG_20251011_192907.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-11 11:00:08",
+    "focalLength": 54,
+    "fNumber": 1.6,
+    "exposureTime": 0.0099,
+    "iso": 72,
+    "lat": 46.01115,
+    "lon": 9.282889,
+    "location": "📍 意大利 · 伦巴第 · 柏加馬阿爾卑斯山脈"
+  },
+  "IMG_20251011_193141.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-11 11:00:01",
+    "focalLength": 34,
+    "fNumber": 1.6,
+    "exposureTime": 0.0028,
+    "iso": 72,
+    "lat": 46.01115,
+    "lon": 9.282889,
+    "location": "📍 意大利 · 伦巴第 · 柏加馬阿爾卑斯山脈"
+  },
+  "IMG_20251012_190221.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-10-10 15:17:04",
+    "focalLength": 53,
+    "fNumber": 1.6,
+    "iso": 71,
+    "lat": 45.431633,
+    "lon": 12.328936,
+    "location": "📍 意大利 · 威尼托 · Venetian Plain"
+  },
+  "IMG_20251019_131243.jpg": {
+    "device": "",
+    "dateTime": "2025-10-19 13:12:43"
+  },
+  "IMG_20260102_074142.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-01-02 07:41:42",
+    "focalLength": 135,
+    "fNumber": 4.0,
+    "exposureTime": 0.02,
+    "iso": 330,
+    "lat": 24.451686,
+    "lon": 118.062964,
+    "location": "📍 中国 · 福建省 · 厦门港"
+  },
+  "IMG_20260102_091001.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-01-02 09:10:01",
+    "focalLength": 45,
+    "fNumber": 1.6,
+    "exposureTime": 0.001514,
+    "iso": 72,
+    "lat": 24.444661,
+    "lon": 118.062197,
+    "location": "📍 中国 · 福建省 · 厦门市"
+  },
+  "IMG_20260308_154603.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-08 14:54:15",
+    "focalLength": 50,
+    "fNumber": 1.6,
+    "exposureTime": 0.0029,
+    "iso": 72,
+    "lat": 39.984767,
+    "lon": 116.490364,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260308_160506.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-08 15:15:33",
+    "focalLength": 78,
+    "fNumber": 1.6,
+    "exposureTime": 0.0002,
+    "iso": 72,
+    "lat": 39.98305,
+    "lon": 116.489292,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260308_160815.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-08 15:01:56",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.0035,
+    "iso": 50,
+    "lat": 39.983847,
+    "lon": 116.489475,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260315_125231_edit_18940.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-15 12:52:31",
+    "focalLength": 67,
+    "fNumber": 1.6,
+    "exposureTime": 0.00044463,
+    "iso": 72,
+    "lat": 39.965769,
+    "lon": 116.510889,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260315_141728.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-15 14:17:28",
+    "focalLength": 100,
+    "fNumber": 2.7,
+    "exposureTime": 0.066666,
+    "iso": 6475,
+    "lat": 39.966922,
+    "lon": 116.511128,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260315_165003.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-15 13:16:47",
+    "focalLength": 82,
+    "fNumber": 1.6,
+    "exposureTime": 0.0005,
+    "iso": 72,
+    "lat": 39.967711,
+    "lon": 116.510439,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260322_153745.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-22 15:37:45",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 315,
+    "lat": 40.002278,
+    "lon": 116.392408,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260322_173456.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-22 15:06:19",
+    "focalLength": 35,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 119,
+    "lat": 40.002142,
+    "lon": 116.3923,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260322_180552.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-22 14:18:52",
+    "focalLength": 89,
+    "fNumber": 2.7,
+    "exposureTime": 0.0032,
+    "iso": 50,
+    "lat": 40.000706,
+    "lon": 116.389967,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260322_181103.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-03-22 12:33:01",
+    "focalLength": 89,
+    "fNumber": 2.7,
+    "exposureTime": 0.0012,
+    "iso": 50,
+    "lat": 39.977589,
+    "lon": 116.390628,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260405_155025.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-04-05 15:50:25",
+    "focalLength": 110,
+    "fNumber": 2.7,
+    "exposureTime": 0.005678,
+    "iso": 50,
+    "lat": 32.059239,
+    "lon": 118.861989,
+    "location": "📍 中国 · 江苏省 · 南京市"
+  },
+  "IMG_20260406_164553.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-04-06 10:33:39",
+    "focalLength": 33,
+    "fNumber": 1.6,
+    "exposureTime": 0.0002,
+    "iso": 72,
+    "lat": 32.046419,
+    "lon": 118.791469,
+    "location": "📍 中国 · 江苏省 · 南京市"
+  },
+  "IMG_20260406_164626.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-04-04 22:23:41",
+    "focalLength": 36,
+    "fNumber": 1.6,
+    "exposureTime": 0.09,
+    "iso": 7634,
+    "lat": 32.065353,
+    "lon": 118.792728,
+    "location": "📍 中国 · 江苏省 · 南京市"
+  },
+  "IMG_20260406_165243.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-04-06 09:11:40",
+    "focalLength": 124,
+    "fNumber": 2.7,
+    "exposureTime": 0.0072,
+    "iso": 50,
+    "lat": 32.0457,
+    "lon": 118.792614,
+    "location": "📍 中国 · 江苏省 · 南京市"
+  },
   "IMG_20260425_181137.jpg": {
     "device": "vivo X200 Pro",
     "dateTime": "2026-04-25 18:11:37",
@@ -208,6 +520,17 @@
     "lon": 168.752608,
     "location": "📍 新西兰 · 奧塔哥大區 · 皇后镇"
   },
+  "IMG_20260502_134830.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-02 13:48:30",
+    "focalLength": 50,
+    "fNumber": 16.0,
+    "exposureTime": 0.002971,
+    "iso": 71,
+    "lat": -45.032994,
+    "lon": 168.657886,
+    "location": "📍 新西兰 · 奧塔哥大區 · 皇后镇"
+  },
   "IMG_20260502_144902.jpg": {
     "device": "vivo X200 Pro",
     "dateTime": "2026-05-02 14:49:02",
@@ -240,5 +563,7 @@
     "lat": -45.025744,
     "lon": 168.647547,
     "location": "📍 新西兰 · 奧塔哥大區 · 皇后镇"
-  }
+  },
+  "mmexport1759840935351.jpg": {},
+  "mmexport1759840940096.jpg": {}
 }

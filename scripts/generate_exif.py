@@ -121,6 +121,8 @@ def reverse_geocode(lat, lon):
         return None
 
     country = data.get("countryName", "")
+    if country == "中华人民共和国":
+        country = "中国"
     state = data.get("principalSubdivision", "")
     city = data.get("city") or data.get("locality") or ""
 
@@ -176,6 +178,7 @@ def compress_photo(filepath, output_path, quality):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Extract EXIF and generate thumbnails")
+    parser.add_argument("--force", action="store_true", help="Force full re-processing, ignore cache")
     parser.add_argument("--no-thumbnails", action="store_true", help="Skip thumbnail generation")
     parser.add_argument("--no-compressed", action="store_true", help="Skip compressed photo generation")
     parser.add_argument("--no-geocode", action="store_true", help="Skip reverse geocoding")
@@ -195,27 +198,49 @@ def main():
         print(f"Error: {PHOTO_DIR} not found. Run from project root.")
         sys.exit(1)
 
+    # Load existing exif.json for incremental processing
+    existing = {}
+    if os.path.isfile(OUTPUT_PATH) and not args.force:
+        try:
+            with open(OUTPUT_PATH, "r") as fp:
+                existing = json.load(fp)
+        except (json.JSONDecodeError, OSError):
+            existing = {}
+
     result = {}
     filenames = sorted(f for f in os.listdir(PHOTO_DIR)
                        if f.lower().endswith(".jpg") and not f.startswith("."))
 
-    # --- Extract EXIF ---
+    # --- Extract EXIF (incremental) ---
     print("Extracting EXIF data...")
+    new_count = 0
     for filename in filenames:
+        if filename in existing and not args.force:
+            result[filename] = existing[filename]
+            print(f"  ⏭ {filename}  (cached)")
+            continue
         filepath = os.path.join(PHOTO_DIR, filename)
         try:
             result[filename] = extract_exif(filepath)
+            new_count += 1
             print(f"  ✓ {filename}")
         except Exception as error:
             print(f"  ✗ {filename}: {error}")
             result[filename] = {}
+    print(f"  ({new_count} new, {len(filenames) - new_count} cached)")
 
-    # --- Reverse Geocode ---
+    # Remove deleted photos from result
+    deleted = [fn for fn in existing if fn not in result]
+    for fn in deleted:
+        print(f"  🗑 {fn}  (removed)")
+
+    # --- Reverse Geocode (incremental: only for entries without location) ---
     if not args.no_geocode:
         gps_entries = [(fn, info) for fn, info in result.items()
-                       if info.get("lat") is not None and info.get("lon") is not None]
+                       if info.get("lat") is not None and info.get("lon") is not None
+                       and "location" not in info]
         if gps_entries:
-            print(f"\nReverse geocoding {len(gps_entries)} locations...")
+            print(f"\nReverse geocoding {len(gps_entries)} new locations...")
             for filename, info in gps_entries:
                 location = reverse_geocode(info["lat"], info["lon"])
                 if location:
@@ -223,22 +248,28 @@ def main():
                     print(f"  ✓ {filename}  → {location}")
                 else:
                     print(f"  ✗ {filename}  ({info['lat']}, {info['lon']})")
-                time.sleep(0.3)  # 避免请求过快
+                time.sleep(0.3)
+        else:
+            print("\nNo new locations to geocode.")
 
     with open(OUTPUT_PATH, "w") as fp:
         json.dump(result, fp, indent=2, ensure_ascii=False)
     print(f"\n{len(result)} photos → {OUTPUT_PATH} ({os.path.getsize(OUTPUT_PATH)} bytes)")
 
-    # --- Generate Thumbnails ---
+    # --- Generate Thumbnails (incremental: skip existing) ---
     if not args.no_thumbnails:
         os.makedirs(THUMB_DIR, exist_ok=True)
         print(f"\nGenerating thumbnails (max {args.thumb_width}px, quality {args.thumb_quality})...")
         total_original = 0
         total_thumb = 0
+        skipped = 0
 
         for filename in filenames:
             filepath = os.path.join(PHOTO_DIR, filename)
             thumb_path = os.path.join(THUMB_DIR, filename)
+            if os.path.isfile(thumb_path) and not args.force:
+                skipped += 1
+                continue
             try:
                 original_size = os.path.getsize(filepath)
                 thumb_size = generate_thumbnail(filepath, thumb_path,
@@ -250,21 +281,27 @@ def main():
             except Exception as error:
                 print(f"  ✗ {filename}: {error}")
 
+        if skipped:
+            print(f"  ({skipped} skipped, already exist)")
         if total_original > 0:
             saved = (1 - total_thumb / total_original) * 100
             print(f"\nThumbnails saved to {THUMB_DIR}/")
-            print(f"Total: {total_original // 1024}KB → {total_thumb // 1024}KB (saved {saved:.0f}%)")
+            print(f"Total new: {total_original // 1024}KB → {total_thumb // 1024}KB (saved {saved:.0f}%)")
 
-    # --- Generate Compressed Photos ---
+    # --- Generate Compressed Photos (incremental: skip existing) ---
     if not args.no_compressed:
         os.makedirs(COMPRESSED_DIR, exist_ok=True)
         print(f"\nGenerating compressed photos (quality {args.compressed_quality})...")
         total_original = 0
         total_compressed = 0
+        skipped = 0
 
         for filename in filenames:
             filepath = os.path.join(PHOTO_DIR, filename)
             compressed_path = os.path.join(COMPRESSED_DIR, filename)
+            if os.path.isfile(compressed_path) and not args.force:
+                skipped += 1
+                continue
             try:
                 original_size = os.path.getsize(filepath)
                 compressed_size = compress_photo(filepath, compressed_path, args.compressed_quality)
