@@ -33,12 +33,24 @@
 
   <!-- Gallery View -->
   <div class="view view-gallery active">
-  <div class="sort-bar">
-    <button class="sort-btn" data-sort="dateTime">时间</button>
-    <button class="sort-btn" data-sort="focalLength">焦距</button>
-    <button class="sort-btn" data-sort="fNumber">光圈</button>
-    <button class="sort-btn" data-sort="exposureTime">快门</button>
-    <button class="sort-btn" data-sort="iso">ISO</button>
+  <div class="toolbar">
+    <div class="sort-bar">
+      <button class="sort-btn" data-sort="dateTime">时间</button>
+      <button class="sort-btn" data-sort="focalLength">焦距</button>
+      <button class="sort-btn" data-sort="fNumber">光圈</button>
+      <button class="sort-btn" data-sort="exposureTime">快门</button>
+      <button class="sort-btn" data-sort="iso">ISO</button>
+    </div>
+    <div class="filter-bar">
+      <div class="filter-row">
+        <span class="filter-label">国家</span>
+        <div class="filter-tags" id="filter-country"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">地区</span>
+        <div class="filter-tags" id="filter-region"></div>
+      </div>
+    </div>
   </div>
   <main class="gallery"></main>
   <footer class="site-footer">

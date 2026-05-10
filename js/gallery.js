@@ -129,6 +129,7 @@
             gpsCache[index] = { lat: info.lat, lon: info.lon };
           }
         });
+        buildFilterBar();
       })
       .catch(function (err) {
         console.warn('Failed to load EXIF data:', err);
@@ -607,6 +608,94 @@
 
         sortGallery(currentSortKey, currentSortDir);
       });
+    });
+  }
+
+  /* --- Location Filter --- */
+
+  var activeCountries = [];
+  var activeRegions = [];
+
+  function parseLocation(locStr) {
+    if (!locStr) return null;
+    var clean = locStr.replace(/^📍\s*/, '');
+    var parts = clean.split(/\s*·\s*/);
+    return {
+      country: parts[0] || '',
+      region: parts.length > 1 ? parts.slice(1).join(' · ') : ''
+    };
+  }
+
+  function buildFilterBar() {
+    var countryRow = document.getElementById('filter-country');
+    var regionRow = document.getElementById('filter-region');
+    if (!countryRow || !regionRow) return;
+
+    var countryCount = {};
+    var regionCount = {};
+    // Map each photo index to its parsed location
+    Object.keys(locationCache).forEach(function (key) {
+      var parsed = parseLocation(locationCache[key]);
+      if (!parsed) return;
+      if (parsed.country) countryCount[parsed.country] = (countryCount[parsed.country] || 0) + 1;
+      if (parsed.region) regionCount[parsed.region] = (regionCount[parsed.region] || 0) + 1;
+    });
+
+    // Build country tags
+    var countries = Object.keys(countryCount).sort();
+    var html = '';
+    countries.forEach(function (c) {
+      html += '<button class="filter-tag" data-value="' + c + '">' +
+        '<span class="ft-label">' + c + '</span>' +
+        '<span class="ft-count">' + countryCount[c] + '</span></button>';
+    });
+    countryRow.innerHTML = html;
+
+    // Build region tags
+    var regions = Object.keys(regionCount).sort();
+    html = '';
+    regions.forEach(function (r) {
+      html += '<button class="filter-tag" data-value="' + r + '">' +
+        '<span class="ft-label">' + r + '</span>' +
+        '<span class="ft-count">' + regionCount[r] + '</span></button>';
+    });
+    regionRow.innerHTML = html;
+
+    // Bind events
+    countryRow.querySelectorAll('.filter-tag').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.classList.toggle('active');
+        activeCountries = collectActive(countryRow);
+        applyFilter();
+      });
+    });
+    regionRow.querySelectorAll('.filter-tag').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.classList.toggle('active');
+        activeRegions = collectActive(regionRow);
+        applyFilter();
+      });
+    });
+  }
+
+  function collectActive(container) {
+    var values = [];
+    container.querySelectorAll('.filter-tag.active').forEach(function (btn) {
+      values.push(btn.dataset.value);
+    });
+    return values;
+  }
+
+  function applyFilter() {
+    var noCountry = activeCountries.length === 0;
+    var noRegion = activeRegions.length === 0;
+
+    galleryItems.forEach(function (el, index) {
+      if (noCountry && noRegion) { el.style.display = ''; return; }
+      var parsed = parseLocation(locationCache[index] || '');
+      var matchCountry = noCountry || (parsed && activeCountries.indexOf(parsed.country) !== -1);
+      var matchRegion = noRegion || (parsed && activeRegions.indexOf(parsed.region) !== -1);
+      el.style.display = (matchCountry && matchRegion) ? '' : 'none';
     });
   }
 
