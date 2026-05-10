@@ -52,11 +52,18 @@ body {
   pointer-events: auto;
 }
 
+/* Site Right — view switcher + day/night toggle */
+.site-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+
 /* View Switcher */
 .view-switcher {
   display: flex;
   gap: 3px;
-  pointer-events: auto;
 }
 
 .view-btn {
@@ -96,7 +103,12 @@ body {
   align-self: center;
 }
 
-/* Theme toggle icon visibility */
+/* Theme toggle — always visible, independent from view-switcher */
+.theme-toggle {
+  pointer-events: auto;
+  margin-left: 6px;
+}
+
 .theme-toggle .icon-moon { display: none; }
 .theme-toggle .icon-sun { display: block; }
 body.light-theme .theme-toggle .icon-moon { display: block; }
@@ -938,7 +950,7 @@ body.light-theme {
 }
 
 body.light-theme .site-header {
-  background: rgba(245, 245, 245, 0.92);
+  background: transparent;
 }
 
 body.light-theme .site-title {

@@ -976,40 +976,6 @@
         switchView(viewName);
       });
     });
-
-    var themeToggle = document.querySelector('.theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', function () {
-        document.body.classList.toggle('light-theme');
-        // 用户手动切换后，记住偏好，不再自动切换
-        var isLight = document.body.classList.contains('light-theme');
-        try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
-      });
-    }
-  }
-
-  // --- Auto Theme ---
-  function applyAutoTheme() {
-    var saved = null;
-    try { saved = localStorage.getItem('theme'); } catch (e) {}
-
-    if (saved) {
-      // 用户手动设置过，尊重用户偏好
-      if (saved === 'light') {
-        document.body.classList.add('light-theme');
-      } else {
-        document.body.classList.remove('light-theme');
-      }
-      return;
-    }
-
-    // 自动模式：9:00-18:00 白色，其余黑色
-    var hour = new Date().getHours();
-    if (hour >= 9 && hour < 18) {
-      document.body.classList.add('light-theme');
-    } else {
-      document.body.classList.remove('light-theme');
-    }
   }
 
   /* --- Vlog Player --- */
@@ -1077,7 +1043,6 @@
   window.switchGalleryView = switchView;
 
   function boot() {
-    applyAutoTheme();
     initViewSwitcher();
     initSortBar();
     initVlogPlayer();
