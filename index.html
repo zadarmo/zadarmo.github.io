@@ -12,7 +12,13 @@
 <body>
 
   <header class="site-header">
-    <h1 class="site-title">走走停停</h1>
+    <div class="site-left">
+      <h1 class="site-title">走走停停</h1>
+      <div class="theme-tabs">
+        <button class="theme-tab active" data-theme="photo">📷 摄影</button>
+        <button class="theme-tab" data-theme="music">🎵 音乐</button>
+      </div>
+    </div>
     <nav class="view-switcher">
       <button class="view-btn active" data-view="gallery" aria-label="Photos" title="瀑布视图">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
@@ -75,6 +81,50 @@
   <!-- Timeline View -->
   <div class="view view-timeline">
     <div class="timeline-scroll" id="timeline-scroll"></div>
+  </div>
+
+  <!-- Music View -->
+  <div class="view view-music">
+    <div class="music-page">
+      <!-- Hero -->
+      <section class="music-hero">
+        <div class="music-hero-bg"></div>
+        <div class="music-hero-content">
+          <h2 class="music-hero-title">🎧 我的音乐宇宙</h2>
+          <p class="music-hero-sub">从 <strong>2017.10.3</strong> 开始，与网易云相伴 <strong>9</strong> 年</p>
+          <div class="music-stats">
+            <div class="music-stat">
+              <span class="music-stat-num" data-target="18231">0</span>
+              <span class="music-stat-label">首歌</span>
+            </div>
+            <div class="music-stat">
+              <span class="music-stat-num" data-target="5148">0</span>
+              <span class="music-stat-label">小时</span>
+            </div>
+            <div class="music-stat">
+              <span class="music-stat-num" data-target="58">0</span>
+              <span class="music-stat-label">种曲风</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Annual Report Cards -->
+      <section class="music-section">
+        <h3 class="music-section-title">年度回忆</h3>
+        <div class="music-cards" id="music-cards"></div>
+      </section>
+      <!-- Genre Evolution -->
+      <section class="music-section">
+        <h3 class="music-section-title">曲风品味进化史</h3>
+        <p class="music-section-sub">2021 — 2025</p>
+        <div class="genre-chart" id="genre-chart"></div>
+        <p class="genre-summary" id="genre-summary"></p>
+      </section>
+      <!-- Footer -->
+      <footer class="music-footer">
+        <script>document.write(new Date().getFullYear())</script> 走走停停 — ALL RIGHTS RESERVED
+      </footer>
+    </div>
   </div>
 
   <!-- Lightbox -->

@@ -1,0 +1,85 @@
+{
+  "user": "zadarmo",
+  "platform": "网易云音乐",
+  "joinDate": "2017-10-03",
+  "totalYears": 9,
+  "genreScore": 155,
+  "genreVerdict": "审美独特的精选集",
+  "genreEvolution": {
+    "period": "2021-2025",
+    "note": "华语流行不在统计范围内",
+    "summary": "嘻哈说唱 → 另类/独立 → 欧美流行 → 流行摇滚 → R&B，从入门到精通，堪称耳朵进化教科书",
+    "timeline": {
+      "嘻哈说唱": { "2021": 5, "2022": 5, "2023": 5, "2024": 4, "2025": 5 },
+      "欧美流行": { "2021": 4, "2022": 4, "2023": 4, "2024": 4, "2025": 4 },
+      "国风":     { "2021": 2, "2022": 2, "2023": 3, "2024": 3, "2025": 3 },
+      "民谣":     { "2021": 4, "2022": 3, "2023": 2, "2024": 1, "2025": 1 },
+      "R&B":      { "2021": 3, "2022": 3, "2023": 3, "2024": 3, "2025": 3 },
+      "另类/独立": { "2021": 1, "2022": 2, "2023": 3, "2024": 1, "2025": 1 },
+      "流行摇滚":  { "2021": 0, "2022": 0, "2023": 1, "2024": 2, "2025": 1 },
+      "粤语流行":  { "2021": 0, "2022": 0, "2023": 0, "2024": 0, "2025": 1 }
+    }
+  },
+  "genresExplored": [
+    "民谣", "新世纪", "流行民谣", "独立民谣", "日本流行", "放克", "乡村",
+    "古典", "Trance", "EDM", "Phonk", "欧美流行", "粤语流行", "金属",
+    "Future bass", "House", "电音", "流行", "华语流行", "K-Pop", "硬核说唱",
+    "Techno", "Dubstep", "陷阱舞曲", "另类/独立", "嘻哈说唱", "模糊说唱", "情绪说唱",
+    "当代R&B", "R&B", "旋律说唱", "陷阱", "钻头说唱",
+    "蓝调", "国风", "拉丁音乐", "实验音乐", "摇滚", "日系摇滚",
+    "国风流行", "国风戏腔", "国风摇滚", "慢摇DJ", "流行摇滚", "另类摇滚",
+    "朋克", "儿童", "民谣摇滚", "独立摇滚", "世界音乐",
+    "轻音乐", "二次元", "中国传统特色", "拉丁爵士",
+    "动漫原声", "歌声合成", "雷鬼", "爵士"
+  ],
+  "annualReports": [
+    {
+      "year": 2023,
+      "title": "灵动炽热的小众摘星人",
+      "topArtist": "艾热 AIR",
+      "topSongs": ["诀爱·尽 (LIVE版)", "雪 Distance", "第一回合", "可", "冠军相"],
+      "topAlbum": null,
+      "loopSong": null,
+      "totalSongs": 5305,
+      "totalMinutes": 118634,
+      "dopamine": 7994,
+      "favoriteGenre": "说唱",
+      "activeTime": "14:00-18:00",
+      "keyword": "时间",
+      "image": "WebImage_1778427860310.jpg"
+    },
+    {
+      "year": 2024,
+      "title": "2024年度听歌总结",
+      "topArtist": "kkluv",
+      "topSongs": ["林宛瑜", "逃出深海的鱼", "恭敬不如从命 (Live)", "耙耙爱情故事2024 (Live)", "BRAZIL"],
+      "topAlbum": null,
+      "loopSong": null,
+      "totalSongs": 7191,
+      "totalMinutes": 102059,
+      "favoriteGenre": "说唱",
+      "activeTime": "11:00-14:00",
+      "keyword": "保持 × 期待",
+      "image": "WebImage_1778427790551.jpg"
+    },
+    {
+      "year": 2025,
+      "title": "2025年度音乐四格",
+      "topArtist": "Rapeter",
+      "topSongs": ["跳楼机"],
+      "topAlbum": "IMGOOD别担心我",
+      "loopSong": "跳楼机",
+      "totalSongs": 5735,
+      "totalMinutes": 88190,
+      "companionDays": 3141,
+      "favoriteGenre": "嘻哈说唱",
+      "activeTime": "11:00-12:00",
+      "keyword": null,
+      "image": "WebImage_1778427713229.jpg"
+    }
+  ],
+  "overviewImages": {
+    "genreEvolution": "Screenshot_20260510_234003.jpg",
+    "genreMap": "Screenshot_20260510_234017.jpg"
+  }
+}
