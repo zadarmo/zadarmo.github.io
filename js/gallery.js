@@ -117,9 +117,13 @@
           };
           renderCardInfo(index);
 
+          if (info.location) {
+            locationCache[index] = info.location;
+            renderCardInfo(index);
+          }
+
           if (info.lat != null && info.lon != null) {
             gpsCache[index] = { lat: info.lat, lon: info.lon };
-            reverseGeocode(info.lat, info.lon, index);
           }
         });
       })
@@ -146,40 +150,6 @@
     var rounded = Math.round(value * 10) / 10;
     return 'ƒ/' + rounded;
   }
-
-  function convertDMSToDecimal(dmsArray, ref) {
-    if (!dmsArray || dmsArray.length < 3) return null;
-    var degrees = dmsArray[0];
-    var minutes = dmsArray[1];
-    var seconds = dmsArray[2];
-    var decimal = degrees + minutes / 60 + seconds / 3600;
-    if (ref === 'S' || ref === 'W') decimal = -decimal;
-    return decimal;
-  }
-
-  function reverseGeocode(latitude, longitude, index) {
-    var url = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
-      latitude + '&longitude=' + longitude + '&localityLanguage=zh';
-    fetch(url)
-      .then(function (response) { return response.json(); })
-      .then(function (data) {
-        if (!data) return;
-        var parts = [];
-        var country = data.countryName || '';
-        var state = data.principalSubdivision || '';
-        var city = data.city || data.locality || '';
-        if (country) parts.push(country);
-        if (state && state !== country) parts.push(state);
-        if (city && city !== state) parts.push(city);
-        if (parts.length > 0) {
-          locationCache[index] = '📍 ' + parts.join(' · ');
-          renderCardInfo(index);
-          showExif();
-        }
-      })
-      .catch(function () {});
-  }
-
 
   /* --- Photo Map --- */
 
@@ -300,11 +270,11 @@
     if (!device && !params && !locationText) return;
 
     var html = '';
-    if (device) {
-      html += '<div class="info-device">' + device + '</div>';
-    }
-    if (params) {
-      html += '<div class="info-params">' + params + '</div>';
+    var exifParts = [];
+    if (device) exifParts.push(device);
+    if (params) exifParts.push(params);
+    if (exifParts.length > 0) {
+      html += '<div class="info-exif">' + exifParts.join('  ·  ') + '</div>';
     }
     if (locationText) {
       html += '<div class="info-location">' + locationText + '</div>';
@@ -325,16 +295,15 @@
       return;
     }
 
+    var exifParts = [];
+    if (device) exifParts.push(device);
+    if (params) exifParts.push(params);
+
     var html = '';
-    if (device) {
-      html += '<span class="exif-device">' + device + '</span>';
-    }
-    if (params) {
-      if (html) html += '<br>';
-      html += '<span class="exif-params">' + params + '</span>';
+    if (exifParts.length > 0) {
+      html += '<span class="exif-info">' + exifParts.join('  ·  ') + '</span>';
     }
     if (locationText) {
-      if (html) html += '<br>';
       html += '<span class="exif-location">' + locationText + '</span>';
     }
     exifElement.innerHTML = html;
@@ -549,12 +518,40 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', function () {
         document.body.classList.toggle('light-theme');
+        // 用户手动切换后，记住偏好，不再自动切换
+        var isLight = document.body.classList.contains('light-theme');
+        try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
       });
+    }
+  }
+
+  // --- Auto Theme ---
+  function applyAutoTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+
+    if (saved) {
+      // 用户手动设置过，尊重用户偏好
+      if (saved === 'light') {
+        document.body.classList.add('light-theme');
+      } else {
+        document.body.classList.remove('light-theme');
+      }
+      return;
+    }
+
+    // 自动模式：9:00-18:00 白色，其余黑色
+    var hour = new Date().getHours();
+    if (hour >= 9 && hour < 18) {
+      document.body.classList.add('light-theme');
+    } else {
+      document.body.classList.remove('light-theme');
     }
   }
 
   // --- Init ---
   function boot() {
+    applyAutoTheme();
     buildGallery();
     initLazyLoad();
     initViewSwitcher();

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-从 photos/2026_51/ 目录下的所有 JPG 文件中提取 EXIF 数据，
-生成 exif.json 供前端直接加载，同时生成缩略图用于瀑布流展示。
+从 photo/2026_51/ 目录下的所有 JPG 文件中提取 EXIF 数据，
+通过反向地理编码获取地名，生成 exif.json 供前端直接加载，
+同时生成缩略图用于瀑布流展示。
 
 使用方式：
   cd 项目根目录
@@ -9,6 +10,7 @@
 
 可选参数：
   --no-thumbnails    跳过缩略图生成
+  --no-geocode       跳过反向地理编码
   --thumb-width 800  指定缩略图最大宽度（默认 800px）
   --thumb-quality 82 指定缩略图 JPEG 质量（默认 82）
 """
@@ -17,6 +19,9 @@ import argparse
 import json
 import os
 import sys
+import time
+import urllib.request
+import urllib.error
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -89,6 +94,43 @@ def extract_exif(filepath):
     return entry
 
 
+def reverse_geocode(lat, lon):
+    """调用 BigDataCloud API 将经纬度转为中文地名，返回 '📍 国家 · 省 · 城市' 格式字符串。"""
+    url = (f"https://api.bigdatacloud.net/data/reverse-geocode-client"
+           f"?latitude={lat}&longitude={lon}&localityLanguage=zh")
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, json.JSONDecodeError, OSError) as err:
+        print(f"    geocode failed ({lat}, {lon}): {err}")
+        return None
+
+    country = data.get("countryName", "")
+    state = data.get("principalSubdivision", "")
+    city = data.get("city") or data.get("locality") or ""
+
+    # 尝试从 informative 中找中文城市名
+    informative = (data.get("localityInfo") or {}).get("informative") or []
+    for item in informative:
+        wikidata_id = item.get("wikidataId", "")
+        name = item.get("name", "")
+        # informative 中城市级别的条目通常 order 较大且有 wikidataId
+        if name and wikidata_id and item.get("order", 0) >= 7:
+            city = name
+            break
+
+    parts = []
+    if country:
+        parts.append(country)
+    if state and state != country:
+        parts.append(state)
+    if city and city != state:
+        parts.append(city)
+
+    return "📍 " + " · ".join(parts) if parts else None
+
+
 def generate_thumbnail(filepath, output_path, max_width, quality):
     """缩放图片并保存为压缩 JPEG，保留 EXIF 方向信息。"""
     img = Image.open(filepath)
@@ -110,6 +152,7 @@ def generate_thumbnail(filepath, output_path, max_width, quality):
 def parse_args():
     parser = argparse.ArgumentParser(description="Extract EXIF and generate thumbnails")
     parser.add_argument("--no-thumbnails", action="store_true", help="Skip thumbnail generation")
+    parser.add_argument("--no-geocode", action="store_true", help="Skip reverse geocoding")
     parser.add_argument("--thumb-width", type=int, default=DEFAULT_THUMB_WIDTH,
                         help=f"Max thumbnail width in px (default: {DEFAULT_THUMB_WIDTH})")
     parser.add_argument("--thumb-quality", type=int, default=DEFAULT_THUMB_QUALITY,
@@ -138,6 +181,21 @@ def main():
         except Exception as error:
             print(f"  ✗ {filename}: {error}")
             result[filename] = {}
+
+    # --- Reverse Geocode ---
+    if not args.no_geocode:
+        gps_entries = [(fn, info) for fn, info in result.items()
+                       if info.get("lat") is not None and info.get("lon") is not None]
+        if gps_entries:
+            print(f"\nReverse geocoding {len(gps_entries)} locations...")
+            for filename, info in gps_entries:
+                location = reverse_geocode(info["lat"], info["lon"])
+                if location:
+                    info["location"] = location
+                    print(f"  ✓ {filename}  → {location}")
+                else:
+                    print(f"  ✗ {filename}  ({info['lat']}, {info['lon']})")
+                time.sleep(0.3)  # 避免请求过快
 
     with open(OUTPUT_PATH, "w") as fp:
         json.dump(result, fp, indent=2, ensure_ascii=False)

@@ -216,20 +216,23 @@ body.light-theme .sort-btn.active {
   display: block;
   transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               filter 0.6s ease;
-  filter: grayscale(15%) brightness(0.92);
+  filter: none;
 }
 
 .photo-wrapper:hover img {
   transform: scale(1.03);
-  filter: grayscale(0%) brightness(1);
 }
 
 /* Photo info below image */
 .photo-info {
-  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
   min-height: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
+  gap: 12px;
 }
 
 .photo-info.visible {
@@ -238,27 +241,28 @@ body.light-theme .sort-btn.active {
 
 .photo-info:empty {
   padding: 0;
+  display: none;
 }
 
-.photo-info .info-device {
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.82);
+.photo-info .info-exif {
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.02em;
-}
-
-.photo-info .info-params {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.42);
-  margin-top: 3px;
-  letter-spacing: 0.03em;
   font-variant-numeric: tabular-nums;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .photo-info .info-location {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.38);
-  margin-top: 3px;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Loading placeholder */
@@ -371,38 +375,40 @@ body.light-theme .sort-btn.active {
 /* EXIF Info Bar */
 .lightbox-exif {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 18px 24px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.75);
-  white-space: pre-line;
-  text-align: center;
-  line-height: 2;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  max-width: 92vw;
+  width: auto;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
   opacity: 0;
   transition: opacity 0.4s ease;
   font-variant-numeric: tabular-nums;
+  gap: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .lightbox-exif.visible {
   opacity: 1;
 }
 
-.lightbox-exif .exif-device {
-  color: rgba(255, 255, 255, 0.92);
-  font-weight: 500;
-}
-
-.lightbox-exif .exif-params {
-  color: rgba(255, 255, 255, 0.65);
+.lightbox-exif .exif-info {
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
 }
 
 .lightbox-exif .exif-location {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* --- Photo Map --- */
@@ -580,16 +586,12 @@ body.light-theme .photo-wrapper img {
   filter: none;
 }
 
-body.light-theme .photo-info .info-device {
-  color: rgba(0, 0, 0, 0.75);
-}
-
-body.light-theme .photo-info .info-params {
-  color: rgba(0, 0, 0, 0.4);
+body.light-theme .photo-info .info-exif {
+  color: rgba(0, 0, 0, 0.6);
 }
 
 body.light-theme .photo-info .info-location {
-  color: rgba(0, 0, 0, 0.35);
+  color: rgba(0, 0, 0, 0.45);
 }
 
 body.light-theme .gallery-item.loading .photo-wrapper {
