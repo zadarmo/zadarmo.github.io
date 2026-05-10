@@ -23,6 +23,9 @@
       <button class="view-btn" data-view="map" aria-label="Map" title="位置视图">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       </button>
+      <button class="view-btn" data-view="river" aria-label="Pro" title="专业模式">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </button>
       <span class="view-divider"></span>
       <button class="view-btn theme-toggle" aria-label="Toggle theme">
         <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -64,6 +67,11 @@
     <div id="photo-map"></div>
   </div>
 
+  <!-- River View -->
+  <div class="view view-river">
+    <div class="river-container" id="river-container"></div>
+  </div>
+
   <!-- Timeline View -->
   <div class="view view-timeline">
     <div class="timeline-scroll" id="timeline-scroll"></div>
@@ -77,6 +85,23 @@
     <button class="lightbox-nav lightbox-next" aria-label="Next">›</button>
     <span class="lightbox-counter"></span>
     <span class="lightbox-exif"></span>
+  </div>
+
+  <!-- Vlog Gallery Entry (floating) -->
+  <div class="vlog-entry vlog-entry--gallery" id="vlog-banner">
+    <span class="vlog-entry-icon">▶</span>
+    <div class="vlog-entry-info">
+      <span class="vlog-entry-title">📹 新西兰旅行 Vlog</span>
+      <span class="vlog-entry-subtitle">点击观看这趟旅程的视频记录</span>
+    </div>
+  </div>
+
+  <!-- Vlog Player Overlay -->
+  <div class="vlog-overlay" id="vlog-overlay">
+    <div class="vlog-player">
+      <button class="vlog-close" aria-label="Close">✕</button>
+      <iframe id="vlog-iframe" src="" allowfullscreen frameborder="0" scrolling="no"></iframe>
+    </div>
   </div>
 
   <script src="/js/exif.min.js"></script>

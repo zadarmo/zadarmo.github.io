@@ -31,6 +31,7 @@
   var gpsCache = {};
   var mapInitialized = false;
   var timelineInitialized = false;
+  var riverInitialized = false;
   var currentMonth = null;
 
   function getThumbSrc(filename) {
@@ -85,6 +86,7 @@
         // Render card info after galleryItems is populated
         PHOTOS.forEach(function (_, index) { renderCardInfo(index); });
         buildFilterBar();
+        initVlogBanner();
       })
       .catch(function (err) {
         console.warn('Failed to load EXIF data:', err);
@@ -146,6 +148,179 @@
     var match = value.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
     if (!match) return null;
     return match[1] + '.' + match[2] + '.' + match[3] + ' ' + match[4] + ':' + match[5];
+  }
+
+  /* --- River View --- */
+
+  var RIVER_CONFIG = [
+    {
+      key: 'fNumber',
+      label: '光圈',
+      unit: '',
+      gradientStart: '#1b4332',
+      gradientEnd: '#e9c46a',
+      trendLeft: '虚',
+      trendRight: '实',
+      affect: '影响表达 - 背景虚化',
+      format: function (v) { return 'ƒ/' + (Math.round(v * 10) / 10); },
+      scenes: [
+        { min: 0, max: 2.8, label: '虚化 / 人像', desc: '景深浅，背景模糊突出主体' },
+        { min: 2.8, max: 5.6, label: '旅行 / 通用', desc: '景深适中，前后兼顾' },
+        { min: 5.6, max: 11, label: '风景 / 锐利', desc: '景深大，远近都清晰' },
+        { min: 11, max: Infinity, label: '星芒 / 微距', desc: '景深极大，灯光出星芒' }
+      ]
+    },
+    {
+      key: 'exposureTime',
+      label: '快门',
+      unit: '',
+      gradientStart: '#1b2838',
+      gradientEnd: '#e76f51',
+      trendLeft: '冻结',
+      trendRight: '拖影',
+      affect: '影响表达 - 流畅度',
+      format: function (v) {
+        if (v >= 1) return v + 's';
+        return '1/' + Math.round(1 / v) + 's';
+      },
+      scenes: [
+        { min: 0, max: 0.001, label: '冻结运动', desc: '凝固高速瞬间，画面锐利' },
+        { min: 0.001, max: 0.004, label: '日常 / 人物', desc: '抓拍清晰，人物不糊' },
+        { min: 0.004, max: 0.017, label: '街拍 / 手持', desc: '手持安全快门，不易模糊' },
+        { min: 0.017, max: Infinity, label: '长曝 / 夜景 / 光轨', desc: '运动物体拖影，水面雾化' }
+      ]
+    },
+    {
+      key: 'iso',
+      label: 'ISO',
+      unit: '',
+      gradientStart: '#1a1a2e',
+      gradientEnd: '#f0f0f0',
+      trendLeft: '纯净',
+      trendRight: '噪点',
+      affect: '影响画质',
+      format: function (v) { return 'ISO ' + Math.round(v); },
+      scenes: [
+        { min: 0, max: 200, label: '最佳画质', desc: '噪点极少，画面干净' },
+        { min: 200, max: 800, label: '阴天 / 室内', desc: '轻微噪点，日常够用' },
+        { min: 800, max: 3200, label: '暗光', desc: '噪点明显，需后期降噪' },
+        { min: 3200, max: Infinity, label: '极暗 / 演唱会', desc: '噪点重，换取更多进光' }
+      ]
+    },
+    {
+      key: 'focalLength',
+      label: '焦距',
+      unit: 'mm',
+      gradientStart: '#1a3a5c',
+      gradientEnd: '#7b2d8b',
+      trendLeft: '广',
+      trendRight: '窄',
+      affect: '影响表达 - 视角与空间感',
+      format: function (v) { return Math.round(v) + 'mm'; },
+      scenes: [
+        { min: 0, max: 35, label: '风景 / 建筑', desc: '视角宽广，收纳大场景' },
+        { min: 35, max: 50, label: '街拍 / 纪实', desc: '接近人眼视角，画面自然' },
+        { min: 50, max: 85, label: '人像 / 人文', desc: '视角收窄，主体突出' },
+        { min: 85, max: 135, label: '特写 / 肖像', desc: '背景压缩，面部比例好' },
+        { min: 135, max: Infinity, label: '远摄 / 运动', desc: '拉近远处，空间压缩明显' }
+      ]
+    }
+  ];
+
+  function buildRiverView() {
+    var container = document.getElementById('river-container');
+    if (!container) return;
+
+    var html = '';
+
+    RIVER_CONFIG.forEach(function (river) {
+      // Collect all photos that have this parameter
+      var photos = [];
+      PHOTOS.forEach(function (filename, index) {
+        var exif = exifCache[index];
+        if (!exif || exif[river.key] == null) return;
+        photos.push({
+          filename: filename,
+          index: index,
+          value: exif[river.key]
+        });
+      });
+
+      if (photos.length === 0) return;
+
+      html += '<div class="river-lane">';
+      html += '<div class="river-header">';
+      html += '<span class="river-label">' + river.label + '</span>';
+      html += '<span class="river-trend">';
+      html += '<span class="river-trend-endpoint">';
+      html += '<span class="river-trend-num">小</span>';
+      html += '<span class="river-trend-feel">' + river.trendLeft + '</span>';
+      html += '</span>';
+      html += '<span class="river-trend-arrow"></span>';
+      html += '<span class="river-trend-endpoint">';
+      html += '<span class="river-trend-num">大</span>';
+      html += '<span class="river-trend-feel">' + river.trendRight + '</span>';
+      html += '</span>';
+      html += '</span>';
+      if (river.affect) {
+        html += '<span class="river-affect">' + river.affect + '</span>';
+      }
+      html += '</div>';
+
+      // Render each scene group
+      river.scenes.forEach(function (scene) {
+        var rangeText = river.format(scene.min) + ' ~ ' + (scene.max === Infinity ? '∞' : river.format(scene.max));
+
+        // Find matching photos in this scene range
+        var matched = photos.filter(function (p) {
+          return p.value >= scene.min && p.value < (scene.max === Infinity ? Infinity : scene.max);
+        });
+        matched.sort(function (a, b) { return a.value - b.value; });
+
+        html += '<div class="river-group" style="--grad-start:' + river.gradientStart + ';--grad-end:' + river.gradientEnd + ';">';
+        html += '<div class="river-group-header">';
+        html += '<span class="river-group-range">' + rangeText + '</span>';
+        html += '<span class="river-group-desc">' + scene.desc + '</span>';
+        html += '<span class="river-group-label">适用场景：' + scene.label + '</span>';
+        html += '</div>';
+
+        if (matched.length > 0) {
+          html += '<div class="river-group-cards">';
+          matched.forEach(function (photo) {
+            var thumbSrc = getThumbSrc(photo.filename);
+            html += '<div class="river-card" data-index="' + photo.index + '">';
+            html += '<img src="' + thumbSrc + '" alt="Photo" loading="lazy">';
+            html += '<div class="river-card-label">' + river.format(photo.value) + '</div>';
+            html += '</div>';
+          });
+          html += '</div>';
+        } else {
+          html += '<div class="river-group-empty">暂无照片</div>';
+        }
+
+        html += '</div>';
+      });
+
+      html += '</div>';
+    });
+
+    // Source attribution
+    html += '<div class="river-source">';
+    html += '<p>参数场景推荐参考来源：</p>';
+    html += '<p>· <a href="https://www.vsco.co/learn/focal-length" target="_blank">VSCO Learn — What is Focal Length in Photography</a></p>';
+    html += '<p>· <a href="https://tamron-americas.com/blog/what-is-shutter-speed/" target="_blank">Tamron — What is Shutter Speed</a></p>';
+    html += '<p>· <a href="https://photographylife.com/iso-shutter-speed-and-aperture-for-beginners" target="_blank">Photography Life — ISO, Shutter Speed and Aperture for Beginners</a></p>';
+    html += '<p>· <a href="https://digital-photography-school.com/5-important-focal-lengths-to-know-and-the-benefits-of-each/" target="_blank">Digital Photography School — Focal Length Guide</a></p>';
+    html += '</div>';
+
+    container.innerHTML = html;
+
+    // Bind click events
+    container.querySelectorAll('.river-card').forEach(function (el) {
+      el.addEventListener('click', function () {
+        openLightbox(parseInt(el.dataset.index, 10));
+      });
+    });
   }
 
   /* --- Timeline View --- */
@@ -341,6 +516,30 @@
           openLightbox(idx);
         };
       })(point.index));
+    });
+
+    // Vlog map card — show when viewing New Zealand area
+    var vlogMapCard = document.createElement('div');
+    vlogMapCard.className = 'vlog-entry vlog-entry--map';
+    vlogMapCard.innerHTML = '<span class="vlog-entry-icon">▶</span>' +
+      '<div class="vlog-entry-info">' +
+      '<span class="vlog-entry-title">📹 新西兰旅行 Vlog</span>' +
+      '<span class="vlog-entry-subtitle">点击观看这趟旅程的视频记录</span>' +
+      '</div>';
+    mapContainer.appendChild(vlogMapCard);
+
+    vlogMapCard.addEventListener('click', openVlogPlayer);
+
+    photoMap.on('moveend', function () {
+      var bounds = photoMap.getBounds();
+      var nzVisible = bounds.getSouth() < -34 && bounds.getNorth() > -48 &&
+                      bounds.getWest() < 179 && bounds.getEast() > 165 &&
+                      photoMap.getZoom() >= 4;
+      if (nzVisible) {
+        vlogMapCard.classList.add('visible');
+      } else {
+        vlogMapCard.classList.remove('visible');
+      }
     });
   }
 
@@ -543,6 +742,15 @@
         }, 100);
       }
     }
+
+    if (viewName === 'river') {
+      if (!riverInitialized) {
+        riverInitialized = true;
+        setTimeout(function () {
+          buildRiverView();
+        }, 100);
+      }
+    }
   }
 
   // --- Sort ---
@@ -686,6 +894,7 @@
         activeRegions = [];
         updateRegionTags();
         applyFilter();
+        updateVlogBanner();
       });
     });
 
@@ -748,6 +957,8 @@
       var matchRegion = noRegion || (parsed && activeRegions.indexOf(parsed.region) !== -1);
       el.style.display = (matchCountry && matchRegion) ? '' : 'none';
     });
+
+    updateVlogBanner();
   }
 
   function initViewSwitcher() {
@@ -793,11 +1004,72 @@
     }
   }
 
+  /* --- Vlog Player --- */
+
+  var VLOG_CONFIG = {
+    country: '新西兰',
+    src: '//player.bilibili.com/player.html?bvid=BV1ty576TE8R&page=1&autoplay=1&high_quality=1'
+  };
+
+  function openVlogPlayer() {
+    var overlay = document.getElementById('vlog-overlay');
+    var iframe = document.getElementById('vlog-iframe');
+    if (!overlay || !iframe) return;
+    iframe.src = VLOG_CONFIG.src;
+    overlay.classList.add('active');
+    document.body.classList.add('lightbox-open');
+  }
+
+  function closeVlogPlayer() {
+    var overlay = document.getElementById('vlog-overlay');
+    var iframe = document.getElementById('vlog-iframe');
+    if (!overlay || !iframe) return;
+    overlay.classList.remove('active');
+    document.body.classList.remove('lightbox-open');
+    iframe.src = '';
+  }
+
+  function initVlogPlayer() {
+    var overlay = document.getElementById('vlog-overlay');
+    if (!overlay) return;
+
+    overlay.querySelector('.vlog-close').addEventListener('click', closeVlogPlayer);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeVlogPlayer();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        closeVlogPlayer();
+      }
+    });
+  }
+
+  /* --- Vlog Gallery Banner --- */
+
+  function initVlogBanner() {
+    var banner = document.getElementById('vlog-banner');
+    if (!banner) return;
+    banner.addEventListener('click', openVlogPlayer);
+  }
+
+  function updateVlogBanner() {
+    var banner = document.getElementById('vlog-banner');
+    if (!banner) return;
+
+    var hasNZ = activeCountries.indexOf(VLOG_CONFIG.country) !== -1;
+    if (hasNZ) {
+      banner.classList.add('visible');
+    } else {
+      banner.classList.remove('visible');
+    }
+  }
+
   // --- Init ---
   function boot() {
     applyAutoTheme();
     initViewSwitcher();
     initSortBar();
+    initVlogPlayer();
     loadDataAndBuild();
   }
 
