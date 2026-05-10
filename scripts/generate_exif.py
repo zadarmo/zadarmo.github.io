@@ -27,9 +27,11 @@ from PIL.ExifTags import TAGS
 
 PHOTO_DIR = os.path.join("photo", "2026_51")
 THUMB_DIR = os.path.join(PHOTO_DIR, "thumbnails")
+COMPRESSED_DIR = os.path.join(PHOTO_DIR, "compressed")
 OUTPUT_PATH = "exif.json"
 DEFAULT_THUMB_WIDTH = 800
 DEFAULT_THUMB_QUALITY = 82
+DEFAULT_COMPRESSED_QUALITY = 70
 
 
 def dms_to_decimal(dms, ref):
@@ -161,14 +163,28 @@ def generate_thumbnail(filepath, output_path, max_width, quality):
     return os.path.getsize(output_path)
 
 
+def compress_photo(filepath, output_path, quality):
+    """保持原始尺寸，仅降低 JPEG 质量进行压缩。"""
+    img = Image.open(filepath)
+
+    from PIL import ImageOps
+    img = ImageOps.exif_transpose(img)
+
+    img.save(output_path, "JPEG", quality=quality, optimize=True)
+    return os.path.getsize(output_path)
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Extract EXIF and generate thumbnails")
     parser.add_argument("--no-thumbnails", action="store_true", help="Skip thumbnail generation")
+    parser.add_argument("--no-compressed", action="store_true", help="Skip compressed photo generation")
     parser.add_argument("--no-geocode", action="store_true", help="Skip reverse geocoding")
     parser.add_argument("--thumb-width", type=int, default=DEFAULT_THUMB_WIDTH,
                         help=f"Max thumbnail width in px (default: {DEFAULT_THUMB_WIDTH})")
     parser.add_argument("--thumb-quality", type=int, default=DEFAULT_THUMB_QUALITY,
                         help=f"JPEG quality for thumbnails (default: {DEFAULT_THUMB_QUALITY})")
+    parser.add_argument("--compressed-quality", type=int, default=DEFAULT_COMPRESSED_QUALITY,
+                        help=f"JPEG quality for compressed photos (default: {DEFAULT_COMPRESSED_QUALITY})")
     return parser.parse_args()
 
 
@@ -238,6 +254,31 @@ def main():
             saved = (1 - total_thumb / total_original) * 100
             print(f"\nThumbnails saved to {THUMB_DIR}/")
             print(f"Total: {total_original // 1024}KB → {total_thumb // 1024}KB (saved {saved:.0f}%)")
+
+    # --- Generate Compressed Photos ---
+    if not args.no_compressed:
+        os.makedirs(COMPRESSED_DIR, exist_ok=True)
+        print(f"\nGenerating compressed photos (quality {args.compressed_quality})...")
+        total_original = 0
+        total_compressed = 0
+
+        for filename in filenames:
+            filepath = os.path.join(PHOTO_DIR, filename)
+            compressed_path = os.path.join(COMPRESSED_DIR, filename)
+            try:
+                original_size = os.path.getsize(filepath)
+                compressed_size = compress_photo(filepath, compressed_path, args.compressed_quality)
+                total_original += original_size
+                total_compressed += compressed_size
+                ratio = compressed_size / original_size * 100
+                print(f"  ✓ {filename}  {original_size // 1024}KB → {compressed_size // 1024}KB ({ratio:.0f}%)")
+            except Exception as error:
+                print(f"  ✗ {filename}: {error}")
+
+        if total_original > 0:
+            saved = (1 - total_compressed / total_original) * 100
+            print(f"\nCompressed photos saved to {COMPRESSED_DIR}/")
+            print(f"Total: {total_original // 1024}KB → {total_compressed // 1024}KB (saved {saved:.0f}%)")
 
     print("\nAll done!")
 

@@ -11,7 +11,7 @@
 
   var REMOTE_DIR = 'https://pub-c40b81a03e774e4fae8c2e6b28abcb92.r2.dev/2026_51/';
   var LOCAL_THUMB_DIR = '/photo/2026_51/thumbnails/';
-  var LOCAL_FULL_DIR = '/photo/2026_51/';
+  var LOCAL_FULL_DIR = '/photo/2026_51/compressed/';
   var EXIF_JSON_PATH = '/exif.json';
   var PHOTOS = [
     'IMG_20260425_181137.jpg',
@@ -224,13 +224,15 @@
           var timeStr = timeMatch ? timeMatch[1] + ':' + timeMatch[2] : '';
           var loc = locationCache[item.index] || '';
           var device = exif.device || '';
+          var params = exif.params || '';
 
           html += '<div class="tl-node" data-index="' + item.index + '">' +
             '<img src="' + thumbSrc + '" alt="Photo" loading="lazy">' +
             '<div class="tl-meta">' +
               (timeStr ? '<span class="tl-time">' + timeStr + '</span>' : '') +
-              (loc ? '<span class="tl-loc">' + loc + '</span>' : '') +
               (device ? '<span class="tl-device">' + device + '</span>' : '') +
+              (params ? '<span class="tl-params">' + params + '</span>' : '') +
+              (loc ? '<span class="tl-loc">' + loc + '</span>' : '') +
             '</div>' +
           '</div>';
         });
@@ -587,20 +589,41 @@
     });
   }
 
+  function resetAll() {
+    // Clear sort
+    currentSortKey = null;
+    currentSortDir = null;
+    document.querySelectorAll('.sort-btn').forEach(function (b) {
+      b.classList.remove('active', 'asc', 'desc');
+    });
+
+    // Clear filters
+    activeCountries = [];
+    activeRegions = [];
+    document.querySelectorAll('.filter-tag').forEach(function (btn) {
+      btn.classList.remove('active');
+    });
+
+    // Show all & restore original order
+    galleryItems.forEach(function (el) { el.style.display = ''; });
+    var container = document.querySelector('.gallery');
+    if (container) {
+      galleryItems.forEach(function (el) { container.appendChild(el); });
+    }
+  }
+
   function initSortBar() {
-    document.querySelectorAll('.sort-btn').forEach(function (btn) {
+    document.querySelectorAll('.sort-btn[data-sort]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var key = btn.getAttribute('data-sort');
 
         if (currentSortKey === key) {
-          // Toggle direction
           currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
         } else {
           currentSortKey = key;
           currentSortDir = 'desc';
         }
 
-        // Update button states
         document.querySelectorAll('.sort-btn').forEach(function (b) {
           b.classList.remove('active', 'asc', 'desc');
         });
@@ -609,6 +632,11 @@
         sortGallery(currentSortKey, currentSortDir);
       });
     });
+
+    var resetBtn = document.getElementById('reset-all');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', resetAll);
+    }
   }
 
   /* --- Location Filter --- */

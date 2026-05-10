@@ -204,7 +204,7 @@ body.light-theme .theme-toggle .icon-sun { display: none; }
 
 /* Single card */
 .tl-node {
-  width: 164px;
+  width: 220px;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
@@ -219,9 +219,29 @@ body.light-theme .theme-toggle .icon-sun { display: none; }
 
 .tl-node img {
   width: 100%;
-  height: 110px;
+  height: 150px;
   object-fit: cover;
   display: block;
+}
+
+.tl-device {
+  font-size: 0.64rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.tl-params {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-variant-numeric: tabular-nums;
+}
+
+body.light-theme .tl-device {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+body.light-theme .tl-params {
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .tl-meta {
@@ -345,6 +365,29 @@ body.light-theme .toolbar {
   content: '↓';
 }
 
+.reset-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.62rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.reset-btn:hover {
+  color: #e63946;
+}
+
+body.light-theme .reset-btn {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+body.light-theme .reset-btn:hover {
+  color: #e63946;
+}
+
 /* Light theme sort bar */
 body.light-theme .sort-btn {
   border-color: rgba(0, 0, 0, 0.1);
@@ -431,7 +474,7 @@ body.light-theme .filter-label {
 
 .filter-tag.active {
   color: #fff;
-  background: #e63946;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .ft-count {
@@ -454,8 +497,8 @@ body.light-theme .filter-tag:hover {
 }
 
 body.light-theme .filter-tag.active {
-  color: #fff;
-  background: #e63946;
+  color: #000;
+  background: rgba(0, 0, 0, 0.12);
 }
 
 body.light-theme .ft-count {
