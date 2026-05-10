@@ -53,6 +53,8 @@
   var locationCache = {};
   var gpsCache = {};
   var mapInitialized = false;
+  var timelineInitialized = false;
+  var currentMonth = null;
 
   function getThumbSrc(filename) {
     return USE_LOCAL_IMAGES ? LOCAL_THUMB_DIR + filename : REMOTE_DIR + filename;
@@ -158,6 +160,94 @@
     var match = value.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
     if (!match) return null;
     return match[1] + '.' + match[2] + '.' + match[3] + ' ' + match[4] + ':' + match[5];
+  }
+
+  /* --- Timeline View --- */
+
+  function buildFullTimeline() {
+    var container = document.getElementById('timeline-scroll');
+    if (!container) return;
+
+    // Collect all photos with dateTime, sort descending
+    var allPhotos = [];
+    PHOTOS.forEach(function (filename, index) {
+      var exif = exifCache[index];
+      if (!exif || !exif.dateTime) return;
+      allPhotos.push({ filename: filename, index: index, dateTime: exif.dateTime });
+    });
+    allPhotos.sort(function (a, b) { return b.dateTime.localeCompare(a.dateTime); });
+
+    // Group by month, then by day
+    var monthGroups = [];
+    var curMonth = null;
+    var curDay = null;
+    var curMonthGroup = null;
+    var curDayGroup = null;
+
+    allPhotos.forEach(function (item) {
+      var mMatch = item.dateTime.match(/(\d{4})-(\d{2})/);
+      var dMatch = item.dateTime.match(/(\d{4})-(\d{2})-(\d{2})/);
+      var monthKey = mMatch ? mMatch[1] + '.' + mMatch[2] : 'Unknown';
+      var dayKey = dMatch ? dMatch[1] + '.' + dMatch[2] + '.' + dMatch[3] : 'Unknown';
+
+      if (monthKey !== curMonth) {
+        curMonth = monthKey;
+        curDay = null;
+        curMonthGroup = { month: monthKey, days: [] };
+        monthGroups.push(curMonthGroup);
+      }
+      if (dayKey !== curDay) {
+        curDay = dayKey;
+        curDayGroup = { day: dayKey, items: [] };
+        curMonthGroup.days.push(curDayGroup);
+      }
+      curDayGroup.items.push(item);
+    });
+
+    // Build HTML
+    var html = '';
+    monthGroups.forEach(function (mg) {
+      html += '<div class="tl-month">';
+      html += '<div class="tl-month-label">' + mg.month + '</div>';
+      html += '<div class="tl-month-body">';
+
+      mg.days.forEach(function (dg) {
+        html += '<div class="tl-day">';
+        html += '<div class="tl-day-label">' + dg.day + '</div>';
+        html += '<div class="tl-day-cards">';
+
+        dg.items.forEach(function (item) {
+          var thumbSrc = getThumbSrc(item.filename);
+          var exif = exifCache[item.index] || {};
+          var timeMatch = (exif.dateTime || '').match(/(\d{2}):(\d{2})/);
+          var timeStr = timeMatch ? timeMatch[1] + ':' + timeMatch[2] : '';
+          var loc = locationCache[item.index] || '';
+          var device = exif.device || '';
+
+          html += '<div class="tl-node" data-index="' + item.index + '">' +
+            '<img src="' + thumbSrc + '" alt="Photo" loading="lazy">' +
+            '<div class="tl-meta">' +
+              (timeStr ? '<span class="tl-time">' + timeStr + '</span>' : '') +
+              (loc ? '<span class="tl-loc">' + loc + '</span>' : '') +
+              (device ? '<span class="tl-device">' + device + '</span>' : '') +
+            '</div>' +
+          '</div>';
+        });
+
+        html += '</div></div>';
+      });
+
+      html += '</div></div>';
+    });
+
+    container.innerHTML = html;
+
+    // Bind click events
+    container.querySelectorAll('.tl-node').forEach(function (el) {
+      el.addEventListener('click', function () {
+        openLightbox(parseInt(el.dataset.index, 10));
+      });
+    });
   }
 
   /* --- Photo Map --- */
@@ -450,6 +540,15 @@
         }, 100);
       } else if (photoMap) {
         photoMap.invalidateSize();
+      }
+    }
+
+    if (viewName === 'timeline') {
+      if (!timelineInitialized) {
+        timelineInitialized = true;
+        setTimeout(function () {
+          buildFullTimeline();
+        }, 100);
       }
     }
   }

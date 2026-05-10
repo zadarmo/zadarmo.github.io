@@ -125,6 +125,160 @@ body.light-theme .theme-toggle .icon-sun { display: none; }
   height: 100%;
 }
 
+/* --- Timeline View --- */
+.view-timeline {
+  padding: 60px 0 40px;
+}
+
+/* Timeline scroll area */
+.timeline-scroll {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 24px 60px;
+}
+
+/* Month group */
+.tl-month {
+  margin-bottom: 48px;
+}
+
+.tl-month:last-child {
+  margin-bottom: 0;
+}
+
+.tl-month-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 24px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tl-month-body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Day group */
+.tl-day {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tl-day-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  padding-left: 16px;
+}
+
+.tl-day-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e63946;
+}
+
+/* Cards container — horizontal wrap on PC */
+.tl-day-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Single card */
+.tl-node {
+  width: 164px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.tl-node:hover {
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-2px);
+}
+
+.tl-node img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+}
+
+.tl-meta {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.tl-time {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-loc {
+  font-size: 0.64rem;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tl-device {
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* Light theme timeline */
+body.light-theme .tl-month-label {
+  color: rgba(0, 0, 0, 0.85);
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .tl-day-label {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+body.light-theme .tl-node {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-theme .tl-node:hover {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+body.light-theme .tl-time {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+body.light-theme .tl-loc {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+body.light-theme .tl-device {
+  color: rgba(0, 0, 0, 0.2);
+}
+
 /* --- Sort Bar --- */
 .sort-bar {
   display: flex;
@@ -545,6 +699,10 @@ body.light-theme .sort-btn.active {
   .lightbox-exif .exif-params::after,
   .lightbox-exif .exif-date::after {
     content: '';
+  }
+  /* Timeline mobile */
+  .tl-node {
+    width: 100%;
   }
 }
 
