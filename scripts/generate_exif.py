@@ -1,21 +1,30 @@
 #!/usr/bin/env python3
 """
 从 photos/2026_51/ 目录下的所有 JPG 文件中提取 EXIF 数据，
-生成 photos/exif.json 供前端直接加载。
+生成 exif.json 供前端直接加载，同时生成缩略图用于瀑布流展示。
 
 使用方式：
   cd 项目根目录
   python3 scripts/generate_exif.py
+
+可选参数：
+  --no-thumbnails    跳过缩略图生成
+  --thumb-width 800  指定缩略图最大宽度（默认 800px）
+  --thumb-quality 82 指定缩略图 JPEG 质量（默认 82）
 """
 
+import argparse
 import json
 import os
 import sys
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-PHOTO_DIR = os.path.join("photos", "2026_51")
+PHOTO_DIR = os.path.join("photo", "2026_51")
+THUMB_DIR = os.path.join(PHOTO_DIR, "thumbnails")
 OUTPUT_PATH = "exif.json"
+DEFAULT_THUMB_WIDTH = 800
+DEFAULT_THUMB_QUALITY = 82
 
 
 def dms_to_decimal(dms, ref):
@@ -80,14 +89,47 @@ def extract_exif(filepath):
     return entry
 
 
+def generate_thumbnail(filepath, output_path, max_width, quality):
+    """缩放图片并保存为压缩 JPEG，保留 EXIF 方向信息。"""
+    img = Image.open(filepath)
+
+    # 处理 EXIF 方向旋转
+    from PIL import ImageOps
+    img = ImageOps.exif_transpose(img)
+
+    width, height = img.size
+    if width > max_width:
+        ratio = max_width / width
+        new_size = (max_width, int(height * ratio))
+        img = img.resize(new_size, Image.LANCZOS)
+
+    img.save(output_path, "JPEG", quality=quality, optimize=True)
+    return os.path.getsize(output_path)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Extract EXIF and generate thumbnails")
+    parser.add_argument("--no-thumbnails", action="store_true", help="Skip thumbnail generation")
+    parser.add_argument("--thumb-width", type=int, default=DEFAULT_THUMB_WIDTH,
+                        help=f"Max thumbnail width in px (default: {DEFAULT_THUMB_WIDTH})")
+    parser.add_argument("--thumb-quality", type=int, default=DEFAULT_THUMB_QUALITY,
+                        help=f"JPEG quality for thumbnails (default: {DEFAULT_THUMB_QUALITY})")
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
+
     if not os.path.isdir(PHOTO_DIR):
         print(f"Error: {PHOTO_DIR} not found. Run from project root.")
         sys.exit(1)
 
     result = {}
-    filenames = sorted(f for f in os.listdir(PHOTO_DIR) if f.lower().endswith(".jpg"))
+    filenames = sorted(f for f in os.listdir(PHOTO_DIR)
+                       if f.lower().endswith(".jpg") and not f.startswith("."))
 
+    # --- Extract EXIF ---
+    print("Extracting EXIF data...")
     for filename in filenames:
         filepath = os.path.join(PHOTO_DIR, filename)
         try:
@@ -99,8 +141,35 @@ def main():
 
     with open(OUTPUT_PATH, "w") as fp:
         json.dump(result, fp, indent=2, ensure_ascii=False)
+    print(f"\n{len(result)} photos → {OUTPUT_PATH} ({os.path.getsize(OUTPUT_PATH)} bytes)")
 
-    print(f"\nDone! {len(result)} photos → {OUTPUT_PATH} ({os.path.getsize(OUTPUT_PATH)} bytes)")
+    # --- Generate Thumbnails ---
+    if not args.no_thumbnails:
+        os.makedirs(THUMB_DIR, exist_ok=True)
+        print(f"\nGenerating thumbnails (max {args.thumb_width}px, quality {args.thumb_quality})...")
+        total_original = 0
+        total_thumb = 0
+
+        for filename in filenames:
+            filepath = os.path.join(PHOTO_DIR, filename)
+            thumb_path = os.path.join(THUMB_DIR, filename)
+            try:
+                original_size = os.path.getsize(filepath)
+                thumb_size = generate_thumbnail(filepath, thumb_path,
+                                                args.thumb_width, args.thumb_quality)
+                total_original += original_size
+                total_thumb += thumb_size
+                ratio = thumb_size / original_size * 100
+                print(f"  ✓ {filename}  {original_size // 1024}KB → {thumb_size // 1024}KB ({ratio:.0f}%)")
+            except Exception as error:
+                print(f"  ✗ {filename}: {error}")
+
+        if total_original > 0:
+            saved = (1 - total_thumb / total_original) * 100
+            print(f"\nThumbnails saved to {THUMB_DIR}/")
+            print(f"Total: {total_original // 1024}KB → {total_thumb // 1024}KB (saved {saved:.0f}%)")
+
+    print("\nAll done!")
 
 
 if __name__ == "__main__":

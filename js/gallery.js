@@ -4,8 +4,14 @@
 (function () {
   'use strict';
 
-  /* --- Photo Data --- */
-  var PHOTO_DIR = 'https://pub-c40b81a03e774e4fae8c2e6b28abcb92.r2.dev/2026_51/';
+  /* --- Image Source Config --- */
+  // true  = local mode: thumbnails from /photos/2026_51/thumbnails/, full images from /photos/2026_51/
+  // false = remote mode: all images from Cloudflare R2
+  var USE_LOCAL_IMAGES = true;
+
+  var REMOTE_DIR = 'https://pub-c40b81a03e774e4fae8c2e6b28abcb92.r2.dev/2026_51/';
+  var LOCAL_THUMB_DIR = '/photo/2026_51/thumbnails/';
+  var LOCAL_FULL_DIR = '/photo/2026_51/';
   var EXIF_JSON_PATH = '/exif.json';
   var PHOTOS = [
     'IMG_20260425_181137.jpg',
@@ -48,17 +54,26 @@
   var gpsCache = {};
   var mapInitialized = false;
 
+  function getThumbSrc(filename) {
+    return USE_LOCAL_IMAGES ? LOCAL_THUMB_DIR + filename : REMOTE_DIR + filename;
+  }
+
+  function getFullSrc(filename) {
+    return USE_LOCAL_IMAGES ? LOCAL_FULL_DIR + filename : REMOTE_DIR + filename;
+  }
+
   function buildGallery() {
     var container = document.querySelector('.gallery');
     if (!container) return;
 
     PHOTOS.forEach(function (filename) {
-      var src = PHOTO_DIR + filename;
+      var thumbSrc = getThumbSrc(filename);
+      var fullSrc = getFullSrc(filename);
       var item = document.createElement('div');
       item.className = 'gallery-item loading';
       item.innerHTML =
         '<div class="photo-wrapper">' +
-          '<img data-src="' + src + '" data-full="' + src + '" alt="Photo">' +
+          '<img data-src="' + thumbSrc + '" data-full="' + fullSrc + '" alt="Photo">' +
         '</div>' +
         '<div class="photo-info"></div>';
       container.appendChild(item);
