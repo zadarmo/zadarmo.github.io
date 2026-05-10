@@ -408,7 +408,11 @@
   function updateLightboxImage() {
     var source = galleryImages[currentIndex];
     var fullSrc = source.dataset.full || source.src;
+
+    // Clear old image first so it doesn't linger while new one loads progressively
+    lightboxImage.removeAttribute('src');
     lightboxImage.src = fullSrc;
+
     counterElement.textContent = (currentIndex + 1) + ' / ' + galleryImages.length;
     showExif();
   }
