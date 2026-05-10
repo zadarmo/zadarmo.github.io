@@ -123,6 +123,9 @@ def reverse_geocode(lat, lon):
     country = data.get("countryName", "")
     if country == "中华人民共和国":
         country = "中国"
+    if country == "香港":
+        country = "中国"
+        state = "香港"
     state = data.get("principalSubdivision", "")
     city = data.get("city") or data.get("locality") or ""
 
