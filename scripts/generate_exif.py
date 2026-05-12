@@ -205,7 +205,7 @@ def main():
     existing = {}
     if os.path.isfile(OUTPUT_PATH) and not args.force:
         try:
-            with open(OUTPUT_PATH, "r") as fp:
+            with open(OUTPUT_PATH, "r", encoding='utf-8') as fp:
                 existing = json.load(fp)
         except (json.JSONDecodeError, OSError):
             existing = {}
@@ -255,7 +255,7 @@ def main():
         else:
             print("\nNo new locations to geocode.")
 
-    with open(OUTPUT_PATH, "w") as fp:
+    with open(OUTPUT_PATH, "w", encoding='utf-8') as fp:
         json.dump(result, fp, indent=2, ensure_ascii=False)
     print(f"\n{len(result)} photos → {OUTPUT_PATH} ({os.path.getsize(OUTPUT_PATH)} bytes)")
 

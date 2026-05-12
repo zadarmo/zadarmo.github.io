@@ -564,6 +564,39 @@
     "lon": 168.647547,
     "location": "📍 新西兰 · 奧塔哥大區 · 皇后镇"
   },
+  "IMG_20260512_224104.jpg": {
+    "device": "",
+    "dateTime": "2026-05-12 22:41:04",
+    "lat": 35.6586,
+    "lon": 139.7454,
+    "location": "📍 日本 · 东京 · 东京塔"
+  },
+  "IMG_20260512_224523.jpg": {
+    "device": "",
+    "dateTime": "2026-05-12 22:45:23",
+    "lat": 34.9992,
+    "lon": "135.7806",
+    "location":"📍 日本 · 京都 · 二年坂"
+  },
+  "IMG_20260512_224826.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-07 16:03:51",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.0193,
+    "iso": 123
+  },
+  "IMG_20260512_225241.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-04 09:05:53",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.0006,
+    "iso": 50,
+    "lat": 34.6654,
+    "lon": 135.4323,
+    "location": "📍 日本 · 大版 · 环球影城"
+  },
   "mmexport1759840935351.jpg": {},
   "mmexport1759840940096.jpg": {}
 }
