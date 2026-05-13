@@ -420,11 +420,7 @@
     font-size: 1.6rem;
   }
 
-  .theme-tabs {
-    display: flex;
-  }
-
-  .theme-tab {
+  .dropdown-trigger {
     font-size: 0.65rem;
     padding: 3px 8px;
   }

@@ -7,6 +7,7 @@
   <meta name="description" content="走走停停 — 摄影作品集">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="stylesheet" href="/css/gallery.css">
+  <link rel="stylesheet" href="/css/color-grading.css">
   <link rel="stylesheet" href="/css/music.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
@@ -15,26 +16,34 @@
   <header class="site-header">
     <div class="site-left">
       <h1 class="site-title">走走停停</h1>
-      <div class="theme-tabs">
-        <button class="theme-tab active" data-theme="gallery">📷 摄影</button>
-        <button class="theme-tab" data-theme="music">🎵 音乐</button>
+      <div class="dropdown theme-dropdown" id="theme-dropdown">
+        <button class="dropdown-trigger" id="theme-trigger">
+          <span class="dropdown-icon">📷</span>
+          <span class="dropdown-text">摄影</span>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item active" data-theme="gallery"><span class="dropdown-item-icon">📷</span>摄影</button>
+          <button class="dropdown-item" data-theme="music"><span class="dropdown-item-icon">🎵</span>音乐</button>
+          <button class="dropdown-item" data-theme="design"><span class="dropdown-item-icon">🎨</span>设计</button>
+          <button class="dropdown-item" data-theme="reading"><span class="dropdown-item-icon">📖</span>阅读</button>
+        </div>
       </div>
     </div>
     <div class="site-right">
-      <nav class="view-switcher">
-        <button class="view-btn active" data-view="gallery" aria-label="Photos" title="瀑布视图">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <div class="dropdown view-dropdown" id="view-dropdown">
+        <button class="dropdown-trigger" id="view-trigger">
+          <svg class="dropdown-view-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          <span class="dropdown-text">瀑布</span>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <button class="view-btn" data-view="timeline" aria-label="Timeline" title="时间视图">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </button>
-        <button class="view-btn" data-view="map" aria-label="Map" title="位置视图">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </button>
-        <button class="view-btn" data-view="river" aria-label="Pro" title="专业模式">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        </button>
-      </nav>
+        <div class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item active" data-view="gallery"><span class="dropdown-item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span>瀑布视图</button>
+          <button class="dropdown-item" data-view="timeline"><span class="dropdown-item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>时间视图</button>
+          <button class="dropdown-item" data-view="map"><span class="dropdown-item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></span>位置视图</button>
+          <button class="dropdown-item" data-view="river"><span class="dropdown-item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>专业视图</button>
+        </div>
+      </div>
       <button class="view-btn theme-toggle" aria-label="Toggle theme">
         <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -85,6 +94,24 @@
     <div class="timeline-scroll" id="timeline-scroll"></div>
   </div>
 
+  <!-- Design View (placeholder) -->
+  <div class="view view-design">
+    <div class="placeholder-view">
+      <span class="placeholder-icon">🎨</span>
+      <h2 class="placeholder-title">设计</h2>
+      <p class="placeholder-desc">内容建设中，敬请期待…</p>
+    </div>
+  </div>
+
+  <!-- Reading View (placeholder) -->
+  <div class="view view-reading">
+    <div class="placeholder-view">
+      <span class="placeholder-icon">📖</span>
+      <h2 class="placeholder-title">阅读</h2>
+      <p class="placeholder-desc">内容建设中，敬请期待…</p>
+    </div>
+  </div>
+
   <!-- Music View -->
   <div class="view view-music">
     <div class="music-page">
@@ -131,7 +158,10 @@
 
   <!-- Lightbox -->
   <div class="lightbox-overlay">
-    <img class="lightbox-image" src="" alt="Fullscreen photo">
+    <div class="lightbox-body">
+      <img class="lightbox-image" src="" alt="Fullscreen photo">
+    </div>
+    <div class="lightbox-cg-sidebar" id="lightbox-cg-sidebar"></div>
     <button class="lightbox-close" aria-label="Close">✕</button>
     <button class="lightbox-nav lightbox-prev" aria-label="Previous">‹</button>
     <button class="lightbox-nav lightbox-next" aria-label="Next">›</button>
@@ -160,6 +190,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="/js/common.js"></script>
+  <script src="/js/color-grading.js"></script>
   <script src="/js/gallery.js"></script>
   <script src="/js/music.js"></script>
 </body>

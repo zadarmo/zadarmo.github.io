@@ -315,10 +315,11 @@
 
     container.innerHTML = html;
 
-    // Bind click events
+    // Bind click events — open lightbox with color grading
     container.querySelectorAll('.river-card').forEach(function (el) {
       el.addEventListener('click', function () {
-        openLightbox(parseInt(el.dataset.index, 10));
+        var idx = parseInt(el.dataset.index, 10);
+        openRiverLightbox(idx);
       });
     });
   }
@@ -601,7 +602,35 @@
 
   function closeLightbox() {
     overlay.classList.remove('active');
+    overlay.classList.remove('cg-mode');
     document.body.classList.remove('lightbox-open');
+    ColorGrading.detach();
+  }
+
+  /* --- River Lightbox (with color grading sidebar) --- */
+
+  var riverCurrentIndex = -1;
+
+  function openRiverLightbox(photoIndex) {
+    riverCurrentIndex = photoIndex;
+    loadRiverPhoto(photoIndex);
+
+    overlay.classList.add('active', 'cg-mode');
+    document.body.classList.add('lightbox-open');
+  }
+
+  function loadRiverPhoto(photoIndex) {
+    var filename = PHOTOS[photoIndex];
+    var fullSrc = getFullSrc(filename);
+
+    ColorGrading.detach();
+
+    lightboxImage.removeAttribute('src');
+    lightboxImage.src = fullSrc;
+    counterElement.textContent = (photoIndex + 1) + ' / ' + PHOTOS.length;
+    exifElement.textContent = '';
+
+    ColorGrading.attach(lightboxImage, fullSrc);
   }
 
   function updateLightboxImage() {
@@ -617,11 +646,21 @@
   }
 
   function showPrev() {
+    if (overlay.classList.contains('cg-mode')) {
+      riverCurrentIndex = (riverCurrentIndex - 1 + PHOTOS.length) % PHOTOS.length;
+      loadRiverPhoto(riverCurrentIndex);
+      return;
+    }
     currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
     updateLightboxImage();
   }
 
   function showNext() {
+    if (overlay.classList.contains('cg-mode')) {
+      riverCurrentIndex = (riverCurrentIndex + 1) % PHOTOS.length;
+      loadRiverPhoto(riverCurrentIndex);
+      return;
+    }
     currentIndex = (currentIndex + 1) % galleryImages.length;
     updateLightboxImage();
   }
@@ -710,18 +749,35 @@
 
   var photoMap = null;
 
+  var VIEW_META = {
+    gallery:  { label: '瀑布', svg: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>' },
+    timeline: { label: '时间', svg: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+    map:      { label: '位置', svg: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>' },
+    river:    { label: '专业', svg: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>' }
+  };
+
   function switchView(viewName) {
     document.querySelectorAll('.view').forEach(function (el) {
       el.classList.remove('active');
     });
-    document.querySelectorAll('.view-btn').forEach(function (btn) {
-      btn.classList.remove('active');
-    });
 
     var targetView = document.querySelector('.view-' + viewName);
-    var targetBtn = document.querySelector('.view-btn[data-view="' + viewName + '"]');
     if (targetView) targetView.classList.add('active');
-    if (targetBtn) targetBtn.classList.add('active');
+
+    // Update view dropdown
+    var viewDropdown = document.getElementById('view-dropdown');
+    if (viewDropdown) {
+      viewDropdown.querySelectorAll('.dropdown-item[data-view]').forEach(function (item) {
+        item.classList.toggle('active', item.getAttribute('data-view') === viewName);
+      });
+      var meta = VIEW_META[viewName];
+      if (meta) {
+        var iconEl = viewDropdown.querySelector('.dropdown-view-icon');
+        var textEl = viewDropdown.querySelector('.dropdown-text');
+        if (iconEl) iconEl.outerHTML = '<span class="dropdown-view-icon">' + meta.svg + '</span>';
+        if (textEl) textEl.textContent = meta.label;
+      }
+    }
 
     // Hide gallery vlog banner when leaving gallery view
     var vlogBanner = document.getElementById('vlog-banner');
@@ -970,10 +1026,24 @@
   }
 
   function initViewSwitcher() {
-    document.querySelectorAll('.view-btn[data-view]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var viewName = btn.getAttribute('data-view');
+    var viewDropdown = document.getElementById('view-dropdown');
+    if (!viewDropdown) return;
+
+    var trigger = viewDropdown.querySelector('.dropdown-trigger');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // Close other dropdowns first
+      document.querySelectorAll('.dropdown').forEach(function (d) {
+        if (d !== viewDropdown) d.classList.remove('open');
+      });
+      viewDropdown.classList.toggle('open');
+    });
+
+    viewDropdown.querySelectorAll('.dropdown-item[data-view]').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var viewName = item.getAttribute('data-view');
         switchView(viewName);
+        viewDropdown.classList.remove('open');
       });
     });
   }

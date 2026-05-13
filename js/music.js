@@ -8,13 +8,32 @@
   var musicData = null;
   var musicInitialized = false;
 
-  // --- Theme Tabs ---
-  function initThemeTabs() {
-    var tabs = document.querySelectorAll('.theme-tab');
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var theme = tab.getAttribute('data-theme');
+  // --- Theme Dropdown ---
+  var THEME_META = {
+    gallery:  { icon: '📷', label: '摄影' },
+    music:    { icon: '🎵', label: '音乐' },
+    design:   { icon: '🎨', label: '设计' },
+    reading:  { icon: '📖', label: '阅读' }
+  };
+
+  function initThemeDropdown() {
+    var dropdown = document.getElementById('theme-dropdown');
+    if (!dropdown) return;
+
+    // Toggle open/close
+    var trigger = dropdown.querySelector('.dropdown-trigger');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      closeAllDropdowns();
+      dropdown.classList.toggle('open');
+    });
+
+    // Item click
+    dropdown.querySelectorAll('.dropdown-item[data-theme]').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var theme = item.getAttribute('data-theme');
         switchTheme(theme);
+        dropdown.classList.remove('open');
       });
     });
   }
@@ -22,24 +41,29 @@
   function switchTheme(theme) {
     document.body.setAttribute('data-theme', theme);
 
-    // Update tab active state
-    document.querySelectorAll('.theme-tab').forEach(function (tab) {
-      tab.classList.toggle('active', tab.getAttribute('data-theme') === theme);
-    });
+    // Update dropdown active state + trigger label
+    var dropdown = document.getElementById('theme-dropdown');
+    if (dropdown) {
+      dropdown.querySelectorAll('.dropdown-item[data-theme]').forEach(function (item) {
+        item.classList.toggle('active', item.getAttribute('data-theme') === theme);
+      });
+      var meta = THEME_META[theme];
+      if (meta) {
+        var iconEl = dropdown.querySelector('.dropdown-icon');
+        var textEl = dropdown.querySelector('.dropdown-text');
+        if (iconEl) iconEl.textContent = meta.icon;
+        if (textEl) textEl.textContent = meta.label;
+      }
+    }
+
+    // Hide all views first
+    document.querySelectorAll('.view').forEach(function (el) { el.classList.remove('active'); });
+
+    var vlogBanner = document.getElementById('vlog-banner');
 
     if (theme === 'music') {
-      // Hide all photo views, show music
-      document.querySelectorAll('.view').forEach(function (el) {
-        el.classList.remove('active');
-      });
-      document.querySelectorAll('.view-btn[data-view]').forEach(function (btn) {
-        btn.classList.remove('active');
-      });
       var musicView = document.querySelector('.view-music');
       if (musicView) musicView.classList.add('active');
-
-      // Hide vlog banner
-      var vlogBanner = document.getElementById('vlog-banner');
       if (vlogBanner) vlogBanner.classList.remove('visible');
 
       if (!musicInitialized) {
@@ -48,17 +72,28 @@
       } else {
         animateCounters();
       }
+    } else if (theme === 'design') {
+      var designView = document.querySelector('.view-design');
+      if (designView) designView.classList.add('active');
+      if (vlogBanner) vlogBanner.classList.remove('visible');
+    } else if (theme === 'reading') {
+      var readingView = document.querySelector('.view-reading');
+      if (readingView) readingView.classList.add('active');
+      if (vlogBanner) vlogBanner.classList.remove('visible');
     } else {
-      // Back to photo: hide music, show gallery
-      var musicView = document.querySelector('.view-music');
-      if (musicView) musicView.classList.remove('active');
-
-      // Call gallery's switchView if available
+      // gallery theme — restore photo view
       if (typeof window.switchGalleryView === 'function') {
         window.switchGalleryView('gallery');
       }
     }
   }
+
+  // Close all dropdowns on outside click
+  function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(function (d) { d.classList.remove('open'); });
+  }
+
+  document.addEventListener('click', function () { closeAllDropdowns(); });
 
   // --- Data Loading ---
   function loadMusicData() {
@@ -260,7 +295,7 @@
 
   // --- Init ---
   function bootMusic() {
-    initThemeTabs();
+    initThemeDropdown();
     document.body.setAttribute('data-theme', 'gallery');
   }
 
