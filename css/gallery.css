@@ -1419,6 +1419,61 @@ body.light-theme .river-group-empty {
   border-color: rgba(0, 0, 0, 0.1);
 }
 
+/* --- Tone Cards with Histogram --- */
+.river-card--tone {
+  width: 220px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.river-card--tone img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+.river-card--tone .river-card-label {
+  position: static;
+  background: none;
+  padding: 3px 8px 0;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.tone-histogram {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border-radius: 0 0 8px 8px;
+  image-rendering: pixelated;
+}
+
+body.light-theme .river-card--tone {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* --- Tone Lane Loading --- */
+.tone-loading {
+  padding: 24px 16px;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.04em;
+  animation: tonePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes tonePulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+body.light-theme .tone-loading {
+  color: rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 600px) {
   .river-header {
     flex-direction: row !important;

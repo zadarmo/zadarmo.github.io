@@ -304,6 +304,9 @@
       html += '</div>';
     });
 
+    // Tone lane placeholder — will be filled async
+    html += '<div class="river-lane river-lane--tone" id="river-tone-lane"></div>';
+
     // Source attribution
     html += '<div class="river-source">';
     html += '<p>参数场景推荐参考来源：</p>';
@@ -320,6 +323,186 @@
       el.addEventListener('click', function () {
         var idx = parseInt(el.dataset.index, 10);
         openRiverLightbox(idx);
+      });
+    });
+
+    // Build tone analysis asynchronously
+    buildToneLane();
+  }
+
+  /* --- Tone Analysis (影调) — histogram-based --- */
+
+  var TONE_GROUPS = [
+    { key: 'low',  label: '暗调 Low Key',  desc: '深沉、神秘、戏剧性' },
+    { key: 'mid',  label: '中调 Mid Tone',  desc: '均衡、自然、写实' },
+    { key: 'high', label: '明调 High Key',  desc: '明亮、轻盈、通透' }
+  ];
+
+  function computeHistogram(imgElement) {
+    var canvas = document.createElement('canvas');
+    var sampleSize = 64;
+    canvas.width = sampleSize;
+    canvas.height = sampleSize;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(imgElement, 0, 0, sampleSize, sampleSize);
+    var imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+    var pixels = imageData.data;
+    var histogram = new Array(256);
+    for (var b = 0; b < 256; b++) histogram[b] = 0;
+    var pixelCount = pixels.length / 4;
+    for (var i = 0; i < pixels.length; i += 4) {
+      var lum = Math.round(0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2]);
+      if (lum > 255) lum = 255;
+      histogram[lum]++;
+    }
+    // Normalize to 0-1
+    var maxCount = 0;
+    for (var j = 0; j < 256; j++) { if (histogram[j] > maxCount) maxCount = histogram[j]; }
+    if (maxCount > 0) {
+      for (var k = 0; k < 256; k++) histogram[k] = histogram[k] / maxCount;
+    }
+    // Classify by thirds weight
+    var lowWeight = 0, midWeight = 0, highWeight = 0;
+    for (var n = 0; n < 256; n++) {
+      var raw = histogram[n] * maxCount;
+      if (n < 85)       lowWeight  += raw;
+      else if (n < 170) midWeight  += raw;
+      else              highWeight += raw;
+    }
+    var total = lowWeight + midWeight + highWeight;
+    var toneClass = 'mid';
+    if (total > 0) {
+      var lowRatio  = lowWeight / total;
+      var highRatio = highWeight / total;
+      if (lowRatio > 0.5)      toneClass = 'low';
+      else if (highRatio > 0.5) toneClass = 'high';
+    }
+    return { histogram: histogram, tone: toneClass, pixelCount: pixelCount };
+  }
+
+  function drawHistogramCanvas(histogram, toneClass) {
+    var canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 40;
+    canvas.className = 'tone-histogram';
+    var ctx = canvas.getContext('2d');
+
+    // Color per tone
+    var colors = { low: 'rgba(120,140,255,0.7)', mid: 'rgba(180,180,180,0.7)', high: 'rgba(255,220,120,0.7)' };
+    var barColor = colors[toneClass] || colors.mid;
+
+    // Draw zone backgrounds
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fillRect(0, 0, 85, 40);
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    ctx.fillRect(85, 0, 85, 40);
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fillRect(170, 0, 86, 40);
+
+    // Draw bars
+    for (var i = 0; i < 256; i++) {
+      var barHeight = histogram[i] * 36;
+      if (barHeight < 0.5 && histogram[i] > 0) barHeight = 0.5;
+      ctx.fillStyle = barColor;
+      ctx.fillRect(i, 40 - barHeight, 1, barHeight);
+    }
+
+    return canvas;
+  }
+
+  function loadImageForTone(src) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { resolve(null); };
+      img.src = src;
+    });
+  }
+
+  function buildToneLane() {
+    var toneLane = document.getElementById('river-tone-lane');
+    if (!toneLane) return;
+
+    var headerHtml =
+      '<div class="river-header">' +
+        '<span class="river-label">影调</span>' +
+        '<span class="river-trend">' +
+          '<span class="river-trend-endpoint"><span class="river-trend-num">暗</span><span class="river-trend-feel">深沉</span></span>' +
+          '<span class="river-trend-arrow"></span>' +
+          '<span class="river-trend-endpoint"><span class="river-trend-num">亮</span><span class="river-trend-feel">通透</span></span>' +
+        '</span>' +
+        '<span class="river-affect">影响表达 - 画面情绪与氛围</span>' +
+      '</div>';
+
+    toneLane.innerHTML = headerHtml + '<div class="tone-loading">分析图片直方图中…</div>';
+
+    var tasks = PHOTOS.map(function (filename, index) {
+      var src = getThumbSrc(filename);
+      return loadImageForTone(src).then(function (img) {
+        if (!img) return null;
+        var result = computeHistogram(img);
+        return { filename: filename, index: index, tone: result.tone, histogram: result.histogram };
+      });
+    });
+
+    Promise.all(tasks).then(function (results) {
+      var photos = results.filter(function (r) { return r !== null; });
+
+      // Remove loading
+      toneLane.innerHTML = headerHtml;
+
+      TONE_GROUPS.forEach(function (group) {
+        var matched = photos.filter(function (p) { return p.tone === group.key; });
+
+        var groupEl = document.createElement('div');
+        groupEl.className = 'river-group';
+        groupEl.style.setProperty('--grad-start', '#1a1a2e');
+        groupEl.style.setProperty('--grad-end', '#f0f0f0');
+
+        var groupHeaderHtml =
+          '<div class="river-group-header">' +
+            '<span class="river-group-range">' + group.label + '</span>' +
+            '<span class="river-group-desc">' + group.desc + '</span>' +
+            '<span class="river-group-label">' + matched.length + ' 张</span>' +
+          '</div>';
+        groupEl.innerHTML = groupHeaderHtml;
+
+        if (matched.length > 0) {
+          var cardsContainer = document.createElement('div');
+          cardsContainer.className = 'river-group-cards';
+
+          matched.forEach(function (photo) {
+            var thumbSrc = getThumbSrc(photo.filename);
+            var card = document.createElement('div');
+            card.className = 'river-card river-card--tone';
+            card.setAttribute('data-index', photo.index);
+
+            var imgEl = document.createElement('img');
+            imgEl.src = thumbSrc;
+            imgEl.alt = 'Photo';
+            imgEl.loading = 'lazy';
+            card.appendChild(imgEl);
+
+            var histCanvas = drawHistogramCanvas(photo.histogram, photo.tone);
+            card.appendChild(histCanvas);
+
+            card.addEventListener('click', function () {
+              openRiverLightbox(photo.index);
+            });
+
+            cardsContainer.appendChild(card);
+          });
+
+          groupEl.appendChild(cardsContainer);
+        } else {
+          var emptyEl = document.createElement('div');
+          emptyEl.className = 'river-group-empty';
+          emptyEl.textContent = '暂无照片';
+          groupEl.appendChild(emptyEl);
+        }
+
+        toneLane.appendChild(groupEl);
       });
     });
   }
