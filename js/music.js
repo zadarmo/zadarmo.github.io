@@ -13,7 +13,8 @@
     gallery:  { icon: '📷', label: '摄影' },
     music:    { icon: '🎵', label: '音乐' },
     design:   { icon: '🎨', label: '设计' },
-    reading:  { icon: '📖', label: '阅读' }
+    reading:  { icon: '📖', label: '阅读' },
+    travel:   { icon: '✈️', label: '旅行' }
   };
 
   function initThemeDropdown() {
@@ -80,6 +81,13 @@
       var readingView = document.querySelector('.view-reading');
       if (readingView) readingView.classList.add('active');
       if (vlogBanner) vlogBanner.classList.remove('visible');
+    } else if (theme === 'travel') {
+      var travelView = document.querySelector('.view-travel');
+      if (travelView) travelView.classList.add('active');
+      if (vlogBanner) vlogBanner.classList.remove('visible');
+      if (typeof window.initTravelAnimations === 'function') {
+        window.initTravelAnimations();
+      }
     } else {
       // gallery theme — restore photo view
       if (typeof window.switchGalleryView === 'function') {

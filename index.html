@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/css/gallery.css">
   <link rel="stylesheet" href="/css/color-grading.css">
   <link rel="stylesheet" href="/css/music.css">
+  <link rel="stylesheet" href="/css/travel.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
@@ -27,6 +28,7 @@
           <button class="dropdown-item" data-theme="music"><span class="dropdown-item-icon">🎵</span>音乐</button>
           <button class="dropdown-item" data-theme="design"><span class="dropdown-item-icon">🎨</span>设计</button>
           <button class="dropdown-item" data-theme="reading"><span class="dropdown-item-icon">📖</span>阅读</button>
+          <button class="dropdown-item" data-theme="travel"><span class="dropdown-item-icon">✈️</span>旅行</button>
         </div>
       </div>
     </div>
@@ -112,6 +114,88 @@
     </div>
   </div>
 
+  <!-- Travel View -->
+  <div class="view view-travel">
+    <div class="travel-page">
+      <!-- Hero -->
+      <section class="travel-hero">
+        <div class="travel-hero-bg"></div>
+        <div class="travel-hero-content">
+          <h2 class="travel-hero-title">✈️ 旅行指南</h2>
+          <p class="travel-hero-sub">省钱 · 攻略 · 自驾 · 必备</p>
+        </div>
+      </section>
+
+      <!-- 省钱攻略 -->
+      <section class="travel-section">
+        <h3 class="travel-section-title"><span class="section-icon">💰</span>省钱攻略</h3>
+        <p class="travel-section-sub">花更少的钱，看更大的世界</p>
+        <div class="travel-cards" id="travel-saving">
+          <div class="travel-card">
+            <span class="travel-card-icon">🔍</span>
+            <h4 class="travel-card-title">多平台比价</h4>
+            <p class="travel-card-desc">机票、酒店、景点门票多平台横向对比，找到最优价格</p>
+          </div>
+          <div class="travel-card">
+            <span class="travel-card-icon">🏢</span>
+            <h4 class="travel-card-title">找旅游代理</h4>
+            <p class="travel-card-desc">善用旅游代理商的渠道优惠，省心又省钱</p>
+          </div>
+          <div class="travel-card">
+            <span class="travel-card-icon">💳</span>
+            <h4 class="travel-card-title">一起结账</h4>
+            <p class="travel-card-desc">多人合并支付享受团购折扣，分摊费用更划算</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 旅行攻略 -->
+      <section class="travel-section">
+        <h3 class="travel-section-title"><span class="section-icon">🗺️</span>旅行攻略</h3>
+        <p class="travel-section-sub">目的地深度指南</p>
+        <div class="travel-cards" id="travel-guide">
+          <div class="travel-card travel-card--placeholder">
+            <p class="travel-card-desc">内容建设中，敬请期待…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 自驾须知 -->
+      <section class="travel-section">
+        <h3 class="travel-section-title"><span class="section-icon">🚗</span>自驾须知</h3>
+        <p class="travel-section-sub">安全出行，一路畅通</p>
+        <div class="travel-cards" id="travel-driving">
+          <div class="travel-card">
+            <span class="travel-card-icon">🎒</span>
+            <h4 class="travel-card-title">自驾准备</h4>
+            <p class="travel-card-desc">离线地图 · 音乐 · 垃圾袋 · 固定垃圾袋的绳索 · 纸巾 · 湿纸巾 · 全险 · 开车前绕车录像</p>
+          </div>
+          <div class="travel-card">
+            <span class="travel-card-icon">📱</span>
+            <h4 class="travel-card-title">必备软件</h4>
+            <p class="travel-card-desc">地图导航 · 翻译工具 · 天气查询 · 记账软件</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 必备清单 -->
+      <section class="travel-section">
+        <h3 class="travel-section-title"><span class="section-icon">✅</span>必备清单</h3>
+        <p class="travel-section-sub">出发前的最后一道检查</p>
+        <div class="travel-cards" id="travel-checklist">
+          <div class="travel-card travel-card--placeholder">
+            <p class="travel-card-desc">内容建设中，敬请期待…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="travel-footer">
+        <script>document.write(new Date().getFullYear())</script> 走走停停 — ALL RIGHTS RESERVED
+      </footer>
+    </div>
+  </div>
+
   <!-- Music View -->
   <div class="view view-music">
     <div class="music-page">
@@ -193,5 +277,6 @@
   <script src="/js/color-grading.js"></script>
   <script src="/js/gallery.js"></script>
   <script src="/js/music.js"></script>
+  <script src="/js/travel.js"></script>
 </body>
 </html>
