@@ -111,6 +111,7 @@
         musicData = data;
         buildMusicCards(data);
         buildGenreChart(data);
+        buildHeritageMusic(data);
         setTimeout(animateCounters, 300);
         setTimeout(animateGenreBars, 600);
       });
@@ -288,6 +289,44 @@
     if (summaryEl && data.genreEvolution.summary) {
       summaryEl.textContent = data.genreEvolution.summary;
     }
+  }
+
+  function buildHeritageMusic(data) {
+    var section = data.heritageMusic;
+    var container = document.getElementById('heritage-cards');
+    var titleEl = document.getElementById('heritage-title');
+    var subEl = document.getElementById('heritage-sub');
+    if (!section || !container || !section.items || !section.items.length) return;
+
+    if (titleEl && section.title) titleEl.textContent = section.title;
+    if (subEl) subEl.textContent = section.subtitle || '';
+
+    var html = '';
+    section.items.forEach(function (item) {
+      var tagsHtml = '';
+      (item.tags || []).forEach(function (tag) {
+        tagsHtml += '<span class="heritage-tag">' + tag + '</span>';
+      });
+
+      var meta = [];
+      if (item.region) meta.push(item.region);
+      if (item.inscribed) meta.push(item.inscribed + ' 年入选');
+      if (item.heritageLevel) meta.push(item.heritageLevel);
+
+      html += '<article class="heritage-card">' +
+        '<div class="heritage-card-head">' +
+          '<span class="heritage-card-icon" aria-hidden="true">🎶</span>' +
+          '<div class="heritage-card-titles">' +
+            '<h4 class="heritage-card-name">' + item.name + '</h4>' +
+            (meta.length ? '<p class="heritage-card-meta">' + meta.join(' · ') + '</p>' : '') +
+          '</div>' +
+        '</div>' +
+        (item.description ? '<p class="heritage-card-desc">' + item.description + '</p>' : '') +
+        (tagsHtml ? '<' + 'di' + 'v class="heritage-tags">' + tagsHtml + '</' + 'di' + 'v>' : '') +
+      '</article>';
+    });
+
+    container.innerHTML = html;
   }
 
   function animateGenreBars() {

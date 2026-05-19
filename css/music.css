@@ -539,3 +539,106 @@ body.light-theme .music-footer {
   color: rgba(0, 0, 0, 0.25);
 }
 
+/* --- 中国非遗音乐 --- */
+.music-section--heritage {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 72px;
+}
+
+body.light-theme .music-section--heritage {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+
+.heritage-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.heritage-card {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(255, 255, 255, 0.03) 55%);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 14px;
+  padding: 28px 26px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.heritage-card:hover {
+  border-color: rgba(251, 191, 36, 0.28);
+  transform: translateY(-2px);
+}
+
+body.light-theme .heritage-card {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.06) 0%, rgba(0, 0, 0, 0.02) 55%);
+  border-color: rgba(180, 83, 9, 0.18);
+}
+
+.heritage-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.heritage-card-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.heritage-card-name {
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.heritage-card-meta {
+  font-size: 0.72rem;
+  color: rgba(251, 191, 36, 0.65);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.heritage-card-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1.75;
+  letter-spacing: 0.03em;
+  margin-bottom: 16px;
+}
+
+.heritage-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.heritage-tag {
+  font-size: 0.62rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  color: rgba(251, 191, 36, 0.75);
+  letter-spacing: 0.06em;
+}
+
+body.light-theme .heritage-card-name {
+  color: rgba(0, 0, 0, 0.78);
+}
+
+body.light-theme .heritage-card-meta {
+  color: rgba(180, 83, 9, 0.85);
+}
+
+body.light-theme .heritage-card-desc {
+  color: rgba(0, 0, 0, 0.48);
+}
+
+body.light-theme .heritage-tag {
+  border-color: rgba(180, 83, 9, 0.22);
+  color: rgba(146, 64, 14, 0.85);
+}
+

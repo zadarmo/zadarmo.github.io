@@ -112,6 +112,136 @@ body.light-theme .travel-section + .travel-section {
   border-top-color: rgba(0, 0, 0, 0.06);
 }
 
+/* --- Travel Log Table --- */
+.travel-log-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+body.light-theme .travel-log-wrap {
+  border-color: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.travel-log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+.travel-log-table th,
+.travel-log-table td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.travel-log-table th {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.travel-log-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.travel-log-table td {
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.55;
+}
+
+body.light-theme .travel-log-table th,
+body.light-theme .travel-log-table td {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .travel-log-table th {
+  color: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .travel-log-table td {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.travel-log-link {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: rgba(52, 211, 153, 0.85);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.travel-log-link:hover {
+  color: rgba(110, 231, 183, 1);
+  text-decoration: underline;
+}
+
+body.light-theme .travel-log-link {
+  color: rgba(5, 150, 105, 0.9);
+}
+
+body.light-theme .travel-log-link:hover {
+  color: rgba(4, 120, 87, 1);
+}
+
+.travel-log-muted {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+body.light-theme .travel-log-muted {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 720px) {
+  .travel-log-table thead {
+    display: none;
+  }
+
+  .travel-log-table tbody tr {
+    display: block;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .travel-log-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .travel-log-table td {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: none;
+  }
+
+  .travel-log-table td::before {
+    content: attr(data-label);
+    flex: 0 0 4.5em;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.72rem;
+  }
+
+  body.light-theme .travel-log-table tbody tr {
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+  }
+
+  body.light-theme .travel-log-table td::before {
+    color: rgba(0, 0, 0, 0.35);
+  }
+}
+
 /* --- Card Grid --- */
 .travel-cards {
   display: grid;
