@@ -123,39 +123,34 @@
       <header class="china-map-header">
         <h2 class="china-map-title">华夏版图</h2>
           <p class="china-map-sub">WGS84 经纬度 · 与夜色融为一体的山河轮廓</p>
-        <nav class="china-map-tabs" role="tablist">
-          <button class="china-map-tab active" data-tab="map" role="tab" aria-selected="true">📍 版图</button>
-          <button class="china-map-tab" data-tab="location" role="tab" aria-selected="false">🗺️ 位置视图</button>
-        </nav>
       </header>
+      <div class="china-map-stage">
+        <div class="china-map-aurora" aria-hidden="true"></div>
+        <svg class="china-map-svg" id="china-map-svg" role="img"></svg>
+        <p class="china-map-coord-readout" id="china-map-coord" aria-live="polite">移动鼠标查看经纬度</p>
+      </div>
+      <aside class="china-map-panel" id="china-map-panel" aria-live="polite">
+        <p class="china-map-panel-name">中国</p>
+        <p class="china-map-panel-hint">悬停查看省名与坐标</p>
+        <p class="china-map-panel-coord"></p>
+      </aside>
 
-      <!-- Map sub-view: SVG China Map -->
-      <div class="china-map-subview active" id="china-map-svg-view">
-        <div class="china-map-stage">
-          <div class="china-map-aurora" aria-hidden="true"></div>
-          <svg class="china-map-svg" id="china-map-svg" role="img"></svg>
-          <p class="china-map-coord-readout" id="china-map-coord" aria-live="polite">移动鼠标查看经纬度</p>
+      <!-- Photo lightbox for map markers -->
+      <div class="lightbox" id="map-photo-lightbox" style="display:none;">
+        <button class="lightbox-close" id="map-lb-close" aria-label="关闭">×</button>
+        <button class="lightbox-prev" id="map-lb-prev" aria-label="上一张">‹</button>
+        <button class="lightbox-next" id="map-lb-next" aria-label="下一张">›</button>
+        <div class="lightbox-content">
+          <img class="lightbox-img" id="map-lb-img" src="" alt="">
+          <div class="lightbox-caption" id="map-lb-caption"></div>
         </div>
-        <aside class="china-map-panel" id="china-map-panel" aria-live="polite">
-          <p class="china-map-panel-name">中国</p>
-          <p class="china-map-panel-hint">悬停查看省名与坐标</p>
-          <p class="china-map-panel-coord"></p>
-        </aside>
+        <div class="lightbox-thumbs" id="map-lb-thumbs"></div>
       </div>
 
-      <!-- Map sub-view: Photo Location Map (same as photography's map view) -->
-      <div class="china-map-subview" id="china-map-location-view">
-        <div id="china-map-photo-map" class="china-photo-map"></div>
-        <div id="china-map-photo-lightbox" class="lightbox" style="display:none;">
-          <button class="lightbox-close" id="china-map-lb-close" aria-label="关闭">×</button>
-          <button class="lightbox-prev" id="china-map-lb-prev" aria-label="上一张">‹</button>
-          <button class="lightbox-next" id="china-map-lb-next" aria-label="下一张">›</button>
-          <div class="lightbox-content">
-            <img class="lightbox-img" id="china-map-lb-img" src="" alt="">
-            <div class="lightbox-caption" id="china-map-lb-caption"></div>
-          </div>
-          <div class="lightbox-thumbs" id="china-map-lb-thumbs"></div>
-        </div>
+      <!-- Photo hover tooltip -->
+      <div class="map-photo-tooltip" id="map-photo-tooltip" style="display:none;">
+        <img id="map-tooltip-img" src="" alt="">
+        <div class="map-tooltip-info" id="map-tooltip-info"></div>
       </div>
     </div>
   </div>
