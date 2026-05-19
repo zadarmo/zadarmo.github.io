@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/color-grading.css">
   <link rel="stylesheet" href="/css/music.css">
   <link rel="stylesheet" href="/css/travel.css">
+  <link rel="stylesheet" href="/css/china-map.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
@@ -29,6 +30,7 @@
           <button class="dropdown-item" data-theme="design"><span class="dropdown-item-icon">🎨</span>设计</button>
           <button class="dropdown-item" data-theme="reading"><span class="dropdown-item-icon">📖</span>阅读</button>
           <button class="dropdown-item" data-theme="travel"><span class="dropdown-item-icon">✈️</span>旅行</button>
+          <button class="dropdown-item" data-theme="china-map"><span class="dropdown-item-icon">🗺️</span>版图</button>
         </div>
       </div>
     </div>
@@ -111,6 +113,50 @@
       <span class="placeholder-icon">📖</span>
       <h2 class="placeholder-title">阅读</h2>
       <p class="placeholder-desc">内容建设中，敬请期待…</p>
+    </div>
+  </div>
+
+
+  <!-- China Map View -->
+  <div class="view view-china-map">
+    <div class="china-map-page">
+      <header class="china-map-header">
+        <h2 class="china-map-title">华夏版图</h2>
+          <p class="china-map-sub">WGS84 经纬度 · 与夜色融为一体的山河轮廓</p>
+        <nav class="china-map-tabs" role="tablist">
+          <button class="china-map-tab active" data-tab="map" role="tab" aria-selected="true">📍 版图</button>
+          <button class="china-map-tab" data-tab="location" role="tab" aria-selected="false">🗺️ 位置视图</button>
+        </nav>
+      </header>
+
+      <!-- Map sub-view: SVG China Map -->
+      <div class="china-map-subview active" id="china-map-svg-view">
+        <div class="china-map-stage">
+          <div class="china-map-aurora" aria-hidden="true"></div>
+          <svg class="china-map-svg" id="china-map-svg" role="img"></svg>
+          <p class="china-map-coord-readout" id="china-map-coord" aria-live="polite">移动鼠标查看经纬度</p>
+        </div>
+        <aside class="china-map-panel" id="china-map-panel" aria-live="polite">
+          <p class="china-map-panel-name">中国</p>
+          <p class="china-map-panel-hint">悬停查看省名与坐标</p>
+          <p class="china-map-panel-coord"></p>
+        </aside>
+      </div>
+
+      <!-- Map sub-view: Photo Location Map (same as photography's map view) -->
+      <div class="china-map-subview" id="china-map-location-view">
+        <div id="china-map-photo-map" class="china-photo-map"></div>
+        <div id="china-map-photo-lightbox" class="lightbox" style="display:none;">
+          <button class="lightbox-close" id="china-map-lb-close" aria-label="关闭">×</button>
+          <button class="lightbox-prev" id="china-map-lb-prev" aria-label="上一张">‹</button>
+          <button class="lightbox-next" id="china-map-lb-next" aria-label="下一张">›</button>
+          <div class="lightbox-content">
+            <img class="lightbox-img" id="china-map-lb-img" src="" alt="">
+            <div class="lightbox-caption" id="china-map-lb-caption"></div>
+          </div>
+          <div class="lightbox-thumbs" id="china-map-lb-thumbs"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -314,6 +360,7 @@
   <script src="/js/color-grading.js"></script>
   <script src="/js/gallery.js"></script>
   <script src="/js/music.js"></script>
+  <script src="/js/china-map.js"></script>
   <script src="/js/travel.js"></script>
 </body>
 </html>

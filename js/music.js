@@ -14,7 +14,8 @@
     music:    { icon: '🎵', label: '音乐' },
     design:   { icon: '🎨', label: '设计' },
     reading:  { icon: '📖', label: '阅读' },
-    travel:   { icon: '✈️', label: '旅行' }
+    travel:   { icon: '✈️', label: '旅行' },
+    'china-map': { icon: '🗺️', label: '版图' }
   };
 
   function initThemeDropdown() {
@@ -61,6 +62,10 @@
     document.querySelectorAll('.view').forEach(function (el) { el.classList.remove('active'); });
 
     var vlogBanner = document.getElementById('vlog-banner');
+    var viewDropdown = document.getElementById('view-dropdown');
+    if (viewDropdown) {
+      viewDropdown.style.display = theme === 'gallery' ? '' : 'none';
+    }
 
     if (theme === 'music') {
       var musicView = document.querySelector('.view-music');
@@ -87,6 +92,13 @@
       if (vlogBanner) vlogBanner.classList.remove('visible');
       if (typeof window.initTravelAnimations === 'function') {
         window.initTravelAnimations();
+      }
+    } else if (theme === 'china-map') {
+      var chinaView = document.querySelector('.view-china-map');
+      if (chinaView) chinaView.classList.add('active');
+      if (vlogBanner) vlogBanner.classList.remove('visible');
+      if (typeof window.initChinaMap === 'function') {
+        window.initChinaMap();
       }
     } else {
       // gallery theme — restore photo view

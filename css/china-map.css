@@ -1,0 +1,667 @@
+/* ============================================
+   China Map — Atmospheric SVG (no Leaflet)
+   ============================================ */
+.view-china-map {
+  overflow: hidden;
+  height: 100vh;
+}
+
+.china-map-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 100vh;
+  background: #0a0a0a;
+}
+
+.china-map-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 100px 24px 16px;
+  pointer-events: none;
+}
+
+.china-map-title {
+  font-size: 1.05rem;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 8px;
+}
+
+.china-map-sub {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.22);
+  letter-spacing: 0.14em;
+  font-weight: 300;
+}
+
+.china-map-stage {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0 24px 100px;
+}
+
+.china-map-aurora {
+  position: absolute;
+  inset: 5% 8% 12%;
+  background:
+    radial-gradient(ellipse at 42% 48%, rgba(180, 83, 9, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 62% 38%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 72%, rgba(16, 185, 129, 0.06) 0%, transparent 45%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: chinaAurora 12s ease-in-out infinite alternate;
+}
+
+@keyframes chinaAurora {
+  0%   { opacity: 0.55; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.03); }
+}
+
+.china-map-svg {
+  position: relative;
+  z-index: 1;
+  width: min(96vw, 920px);
+  height: auto;
+  max-height: calc(100vh - 220px);
+  overflow: visible;
+}
+
+.china-map-svg .china-province {
+  fill: rgba(255, 255, 255, 0.035);
+  stroke: rgba(255, 255, 255, 0.09);
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.35s ease, stroke 0.35s ease, filter 0.35s ease;
+  cursor: default;
+}
+
+.china-map-svg .china-province:hover,
+.china-map-svg .china-province.is-active {
+  fill: rgba(251, 191, 36, 0.12);
+  stroke: rgba(251, 191, 36, 0.35);
+  filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.15));
+}
+
+.china-map-svg .china-outline {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.china-map-markers {
+  pointer-events: none;
+}
+
+.china-marker-dot {
+  fill: rgba(251, 191, 36, 0.85);
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.5));
+}
+
+.china-marker-pulse {
+  fill: none;
+  stroke: rgba(251, 191, 36, 0.45);
+  stroke-width: 1;
+  animation: chinaPulse 2.4s ease-out infinite;
+}
+
+@keyframes chinaPulse {
+  0%   { r: 4; opacity: 0.8; }
+  100% { r: 18; opacity: 0; }
+}
+
+.china-marker-label {
+  font-size: 11px;
+  fill: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.08em;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.china-map-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 3;
+  min-width: 200px;
+  max-width: min(90vw, 420px);
+  padding: 14px 22px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.china-map-panel.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.china-map-panel-name {
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.12em;
+}
+
+.china-map-panel-hint {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.28);
+  margin-top: 4px;
+  letter-spacing: 0.06em;
+}
+
+.china-map-coord-readout,
+.china-map-panel-coord {
+  font-size: 0.72rem;
+  color: rgba(251, 191, 36, 0.75);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.china-map-coord-readout {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.china-map-panel-coord {
+  margin-top: 8px;
+}
+
+.china-map-svg {
+  cursor: crosshair;
+}
+
+.china-map-markers .china-marker {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.china-map-page.is-loaded .china-province {
+  animation: chinaFadeIn 0.8s ease backwards;
+}
+
+@keyframes chinaFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body.light-theme .china-map-page {
+  background: #f5f5f4;
+}
+
+body.light-theme .china-map-title {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+body.light-theme .china-map-sub {
+  color: rgba(0, 0, 0, 0.28);
+}
+
+body.light-theme .china-map-svg .china-province {
+  fill: rgba(0, 0, 0, 0.04);
+  stroke: rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .china-map-svg .china-province:hover,
+body.light-theme .china-map-svg .china-province.is-active {
+  fill: rgba(180, 83, 9, 0.1);
+  stroke: rgba(180, 83, 9, 0.35);
+}
+
+body.light-theme .china-map-svg .china-outline {
+  stroke: rgba(0, 0, 0, 0.15);
+}
+
+body.light-theme .china-marker-label {
+  fill: rgba(0, 0, 0, 0.45);
+}
+
+body.light-theme .china-map-panel {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .china-map-panel-name {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+body.light-theme .china-map-panel-hint {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+body.light-theme .china-map-coord-readout,
+body.light-theme .china-map-panel-coord {
+  color: rgba(180, 83, 9, 0.85);
+}
+
+body.light-theme .china-map-coord-readout {
+  background: rgba(255, 255, 255, 0.65);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 600px) {
+  .china-map-header {
+    padding-top: 88px;
+  }
+
+  .china-map-title {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+  }
+
+  .china-map-stage {
+    padding-bottom: 88px;
+  }
+}
+
+/* ============================================
+   China Map — Tab Switcher & Location View
+   ============================================ */
+
+.china-map-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  pointer-events: auto;
+}
+
+.china-map-tab {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.china-map-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.china-map-tab.active {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.35);
+  color: rgba(251, 191, 36, 0.9);
+}
+
+/* Sub-views */
+.china-map-subview {
+  display: none;
+  flex: 1;
+  min-height: 0;
+}
+
+.china-map-subview.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Location view: full-height Leaflet map */
+#china-map-location-view {
+  height: calc(100vh - 160px);
+}
+
+#china-map-photo-map {
+  width: 100%;
+  height: 100%;
+  background: #0a0a0a;
+}
+
+/* Lightbox overrides for china-map context */
+#china-map-photo-lightbox.lightbox {
+  z-index: 1000;
+}
+
+#china-map-photo-lightbox .lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#china-map-photo-lightbox .lightbox-caption {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.78rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+#china-map-photo-lightbox .lightbox-img {
+  max-width: 90vw;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+#china-map-photo-lightbox .lightbox-thumbs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+#china-map-photo-lightbox .lightbox-thumb {
+  width: 56px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.2s;
+  border: 2px solid transparent;
+}
+
+#china-map-photo-lightbox .lightbox-thumb:hover {
+  opacity: 0.8;
+}
+
+#china-map-photo-lightbox .lightbox-thumb.active {
+  opacity: 1;
+  border-color: rgba(251, 191, 36, 0.7);
+}
+
+#china-map-photo-lightbox .lightbox-close,
+#china-map-photo-lightbox .lightbox-prev,
+#china-map-photo-lightbox .lightbox-next {
+  color: white;
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+#china-map-photo-lightbox .lightbox-close:hover,
+#china-map-photo-lightbox .lightbox-prev:hover,
+#china-map-photo-lightbox .lightbox-next:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+#china-map-photo-lightbox .lightbox-close {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+#china-map-photo-lightbox .lightbox-prev { left: 16px; }
+#china-map-photo-lightbox .lightbox-next { right: 16px; }
+
+/* Hide gallery.css photo-map styles when in china-map context */
+.view-china-map #photo-map {
+  display: none;
+}
+
+
+/* === China Map - Photo Location View (位置视图) === */
+
+.china-map-subview {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.china-map-subview.active {
+  display: block;
+}
+
+/* Tab switcher */
+.china-map-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.china-map-tab {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.china-map-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.china-map-tab.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+/* Photo map container */
+#china-map-location-view {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 140px);
+}
+
+#china-map-photo-map {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Leaflet tooltip */
+.map-tooltip {
+  background: rgba(8, 8, 16, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 0;
+  pointer-events: none;
+  width: 160px;
+}
+
+.map-tooltip img {
+  border-radius: 5px 5px 0 0;
+  display: block;
+  height: 100px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.map-tooltip-info {
+  padding: 6px 8px 8px;
+}
+
+.map-tooltip-location {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.map-tooltip-coord {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
+}
+
+/* Map photo marker dot */
+.map-photo-marker {
+  background: rgba(255, 120, 50, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  cursor: pointer;
+  height: 10px;
+  width: 10px;
+}
+
+/* Leaflet overrides for dark theme */
+.leaflet-container {
+  background: #0a0a14;
+}
+
+/* Lightbox — same pattern as photography */
+#china-map-photo-lightbox {
+  background: rgba(0, 0, 0, 0.94);
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  padding: 20px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 2000;
+}
+
+#china-map-photo-lightbox .lightbox-content {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+#china-map-photo-lightbox .lightbox-img {
+  max-height: 75vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+#china-map-photo-lightbox .lightbox-caption {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  text-align: center;
+}
+
+#china-map-photo-lightbox .lightbox-thumbs {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+#china-map-photo-lightbox .lightbox-thumbs img {
+  border-radius: 4px;
+  cursor: pointer;
+  height: 48px;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  width: 48px;
+}
+
+#china-map-photo-lightbox .lightbox-thumbs img:hover,
+#china-map-photo-lightbox .lightbox-thumbs img.active {
+  opacity: 1;
+}
+
+#china-map-photo-lightbox .lightbox-close,
+#china-map-photo-lightbox .lightbox-prev,
+#china-map-photo-lightbox .lightbox-next {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.8rem;
+  height: 44px;
+  line-height: 1;
+  position: absolute;
+  transition: background 0.2s;
+  width: 44px;
+}
+
+#china-map-photo-lightbox .lightbox-close:hover,
+#china-map-photo-lightbox .lightbox-prev:hover,
+#china-map-photo-lightbox .lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#china-map-photo-lightbox .lightbox-close { right: 16px; top: 16px; }
+#china-map-photo-lightbox .lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+#china-map-photo-lightbox .lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
+
+
+/* Leaflet popup dark theme */
+.leaflet-popup-china-map .leaflet-popup-content-wrapper,
+.leaflet-popup-china-map .leaflet-popup-tip {
+  background: rgba(10, 10, 10, 0.92);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+.leaflet-popup-china-map .leaflet-popup-content {
+  margin: 10px 12px;
+}
+.leaflet-popup-china-map .leaflet-popup-close-button {
+  color: rgba(255,255,255,0.5) !important;
+  font-size: 16px;
+  padding: 4px 8px;
+}
+.leaflet-popup-china-map .leaflet-popup-close-button:hover {
+  color: rgba(251,191,36,0.8) !important;
+}
+.leaflet-container.leaflet-touch .leaflet-control-layers,
+.leaflet-container.leaflet-touch .leaflet-bar {
+  border: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+.leaflet-bar a {
+  background: rgba(10, 10, 10, 0.88) !important;
+  color: rgba(255,255,255,0.7) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  font-size: 16px !important;
+}
+.leaflet-bar a:hover {
+  background: rgba(251, 191, 36, 0.15) !important;
+  color: rgba(251, 191, 36, 0.9) !important;
+}
