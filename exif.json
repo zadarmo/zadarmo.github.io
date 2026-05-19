@@ -576,7 +576,7 @@
     "dateTime": "2025-06-06 23:17:28",
     "lat": 34.9992,
     "lon": "135.7806",
-    "location":"📍 日本 · 京都 · 二年坂"
+    "location": "📍 日本 · 京都 · 二年坂"
   },
   "IMG_20260512_224826.jpg": {
     "device": "Xiaomi 23013RK75C",
@@ -596,6 +596,179 @@
     "lat": 34.6654,
     "lon": 135.4323,
     "location": "📍 日本 · 大版 · 环球影城"
+  },
+  "IMG_20260515_011350.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 01:13:50",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.07,
+    "iso": 4588,
+    "lat": 39.470519,
+    "lon": 75.986428,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260515_143945.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 14:39:45",
+    "focalLength": 23,
+    "fNumber": 1.6,
+    "exposureTime": 0.000239,
+    "iso": 72,
+    "lat": 38.730414,
+    "lon": 75.016692,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 克孜勒蘇柯爾克孜自治州"
+  },
+  "IMG_20260516_230356.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-16 13:47:18",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.0056,
+    "iso": 50,
+    "lat": 37.868064,
+    "lon": 75.312661,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260516_230733.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-16 13:16:55",
+    "focalLength": 50,
+    "fNumber": 1.6,
+    "exposureTime": 0.0002,
+    "iso": 72,
+    "lat": 37.821486,
+    "lon": 75.440661,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260517_000012.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 00:45:00",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.02,
+    "iso": 889,
+    "lat": 39.473117,
+    "lon": 75.987464,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260517_000222.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 14:26:30",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.0017,
+    "iso": 50,
+    "lat": 38.730244,
+    "lon": 75.015789,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 克孜勒蘇柯爾克孜自治州"
+  },
+  "IMG_20260517_001100.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 13:40:43",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.0045,
+    "iso": 50,
+    "lat": 38.731547,
+    "lon": 75.019292,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 克孜勒蘇柯爾克孜自治州"
+  },
+  "IMG_20260517_001829.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 14:41:40",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.0001,
+    "iso": 72,
+    "lat": 38.730936,
+    "lon": 75.017244,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 克孜勒蘇柯爾克孜自治州"
+  },
+  "IMG_20260517_010207.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-16 18:22:19",
+    "focalLength": 70,
+    "fNumber": 1.6,
+    "exposureTime": 0.0002,
+    "iso": 71,
+    "lat": 36.850817,
+    "lon": 75.429056,
+    "location": "📍 巴基斯坦 · 吉爾吉特－巴爾蒂斯坦 · 喀什地区"
+  },
+  "IMG_20260517_011908.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 17:13:05",
+    "focalLength": 23,
+    "fNumber": 1.6,
+    "exposureTime": 0.0001,
+    "iso": 72,
+    "lat": 38.227803,
+    "lon": 75.022892,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260517_162738.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-16 11:47:03",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.0072,
+    "iso": 50
+  },
+  "IMG_20260517_203810.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-17 20:38:10",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 262,
+    "lat": 39.471108,
+    "lon": 75.981806,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260517_225751.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-16 13:11:38",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.0002,
+    "iso": 72,
+    "lat": 37.821286,
+    "lon": 75.441519,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260517_231350.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-17 21:08:46",
+    "focalLength": 230,
+    "fNumber": 2.7,
+    "exposureTime": 0.01,
+    "iso": 223,
+    "lat": 39.472617,
+    "lon": 75.985192,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
+  },
+  "IMG_20260518_190454.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-15 14:41:40",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.0001,
+    "iso": 72,
+    "lat": 38.730936,
+    "lon": 75.017244,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 克孜勒蘇柯爾克孜自治州"
+  },
+  "IMG_20260518_194903.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-18 14:45:14",
+    "focalLength": 85,
+    "fNumber": 2.7,
+    "exposureTime": 0.006,
+    "iso": 50,
+    "lat": 38.415711,
+    "lon": 77.260636,
+    "location": "📍 中国 · 新疆维吾尔自治区 · 喀什地区"
   },
   "mmexport1759840935351.jpg": {},
   "mmexport1759840940096.jpg": {}
