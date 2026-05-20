@@ -433,6 +433,12 @@
         }
       });
     });
+
+    // 自动切换到位置视图，加载照片红点
+    setTimeout(function () {
+      var locationTab = document.querySelector('.china-map-tab[data-tab="location"]');
+      if (locationTab) locationTab.click();
+    }, 600);
   }
 
   // Hook into loadChinaMap after SVG renders

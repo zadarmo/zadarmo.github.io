@@ -123,17 +123,28 @@
       <header class="china-map-header">
         <h2 class="china-map-title">华夏版图</h2>
           <p class="china-map-sub">WGS84 经纬度 · 与夜色融为一体的山河轮廓</p>
+        <div class="china-map-tabs">
+          <button class="china-map-tab active" data-tab="map">地图</button>
+          <button class="china-map-tab" data-tab="location">照片位置</button>
+        </div>
       </header>
-      <div class="china-map-stage">
-        <div class="china-map-aurora" aria-hidden="true"></div>
-        <svg class="china-map-svg" id="china-map-svg" role="img"></svg>
-        <p class="china-map-coord-readout" id="china-map-coord" aria-live="polite">移动鼠标查看经纬度</p>
+
+      <div id="china-map-svg-view" class="china-map-subview active">
+        <div class="china-map-stage">
+          <div class="china-map-aurora" aria-hidden="true"></div>
+          <svg class="china-map-svg" id="china-map-svg" role="img"></svg>
+          <p class="china-map-coord-readout" id="china-map-coord" aria-live="polite">移动鼠标查看经纬度</p>
+        </div>
+        <aside class="china-map-panel" id="china-map-panel" aria-live="polite">
+          <p class="china-map-panel-name">中国</p>
+          <p class="china-map-panel-hint">悬停查看省名与坐标</p>
+          <p class="china-map-panel-coord"></p>
+        </aside>
       </div>
-      <aside class="china-map-panel" id="china-map-panel" aria-live="polite">
-        <p class="china-map-panel-name">中国</p>
-        <p class="china-map-panel-hint">悬停查看省名与坐标</p>
-        <p class="china-map-panel-coord"></p>
-      </aside>
+
+      <div id="china-map-location-view" class="china-map-subview">
+        <div id="china-map-photo-map"></div>
+      </div>
 
       <!-- Photo lightbox for map markers -->
       <div class="lightbox" id="map-photo-lightbox" style="display:none;">
