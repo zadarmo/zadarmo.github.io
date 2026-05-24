@@ -1,6 +1,9 @@
 /**
  * China Map Theme — SVG atlas with WGS84 projection
  */
+USE_LOCAL_IMAGES = true;
+BASE_URL = "/photo/2026_51";
+
 (function () {
   'use strict';
 
@@ -406,7 +409,8 @@
         exifData = data;
         initLocationMapView(data);
       })
-      .catch(function () {
+      .catch(function (error) {
+        console.error('加载或初始化位置视图失败:', error); // 2. 打印异常到控制台
         var container = document.getElementById('china-map-photo-map');
         if (container) container.innerHTML = '<p style="color:rgba(255,255,255,0.4);text-align:center;margin-top:60px;font-size:0.85rem">EXIF数据加载失败</p>';
       });

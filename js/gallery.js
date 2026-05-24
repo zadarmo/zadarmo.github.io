@@ -89,7 +89,57 @@
         initVlogBanner();
       })
       .catch(function (err) {
-        console.warn('Failed to load EXIF data:', err);
+        console.error('[gallery] Failed to load EXIF data. Will try reload with cache-bust.', err);
+        // Try once more with cache-bust as fallback
+        fetch(EXIF_JSON_PATH + '?t=' + Date.now(), { headers: { 'Accept': 'application/json, */*' } })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            console.info('[gallery] EXIF loaded via fallback');
+            // Apply the same processing as main path
+            PHOTOS = Object.keys(data).sort();
+            exifCache = {};
+            locationCache = {};
+            gpsCache = {};
+            PHOTOS.forEach(function (filename, index) {
+              var info = data[filename];
+              if (!info) return;
+              var paramParts = [];
+              if (info.focalLength) paramParts.push(formatFocalLength(info.focalLength));
+              if (info.fNumber) paramParts.push(formatAperture(info.fNumber));
+              if (info.exposureTime) paramParts.push(formatExposureTime(info.exposureTime));
+              if (info.iso) paramParts.push('ISO ' + info.iso);
+              exifCache[index] = {
+                device: info.device || '',
+                params: paramParts.length > 0 ? paramParts.join('  ·  ') : '',
+                dateTime: info.dateTime || null,
+                focalLength: info.focalLength || null,
+                fNumber: info.fNumber || null,
+                exposureTime: info.exposureTime || null,
+                iso: info.iso || null
+              };
+              if (info.location) locationCache[index] = info.location;
+              if (info.lat != null && info.lon != null) gpsCache[index] = { lat: info.lat, lon: info.lon };
+            });
+            buildGallery();
+            initGallery();
+            initLazyLoad();
+            PHOTOS.forEach(function (_, index) { renderCardInfo(index); });
+            buildFilterBar();
+            initVlogBanner();
+          })
+          .catch(function (err2) {
+            console.error('[gallery] EXIF fallback also failed. Gallery will use empty state.', err2);
+            // Continue with empty gallery - no crash
+            PHOTOS = [];
+            buildGallery();
+            initGallery();
+            initLazyLoad();
+            buildFilterBar();
+            initVlogBanner();
+          });
       });
   }
 
