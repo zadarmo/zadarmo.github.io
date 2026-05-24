@@ -27,6 +27,7 @@
   let galleryItems = [];
   let currentIndex = 0;
   var exifCache = {};
+  var hsvSatCache = {};
   var locationCache = {};
   var gpsCache = {};
   var mapInitialized = false;
@@ -1055,6 +1056,27 @@
   var currentSortKey = null;
   var currentSortDir = null; // 'asc' or 'desc'
 
+  function computeImageSaturation(img) {
+    if (!img.complete || img.naturalWidth === 0) return null;
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var side = 50;
+    canvas.width = side;
+    canvas.height = side;
+    ctx.drawImage(img, 0, 0, side, side);
+    var data = ctx.getImageData(0, 0, side, side).data;
+    var totalSat = 0, count = 0;
+    for (var i = 0; i < data.length; i += 16) {
+      var r = data[i] / 255, g = data[i+1] / 255, b = data[i+2] / 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      if (max === min) continue;
+      var sat = (max - min) / max;
+      totalSat += sat;
+      count++;
+    }
+    return count > 0 ? totalSat / count : 0;
+  }
+
   function sortGallery(key, direction) {
     var container = document.querySelector('.gallery');
     if (!container || galleryItems.length === 0) return;
@@ -1062,7 +1084,16 @@
     // Build index array with sort values
     var indices = galleryItems.map(function (_, index) {
       var exif = exifCache[index] || {};
-      var value = exif[key];
+      var value;
+
+      if (key === 'hsvSaturation') {
+        var item = galleryItems[index];
+        var img = item ? item.querySelector('img') : null;
+        value = img ? (hsvSatCache[index] != null ? hsvSatCache[index] : (hsvSatCache[index] = computeImageSaturation(img))) : null;
+      } else {
+        value = exif[key];
+      }
+
       return { index: index, value: value, element: galleryItems[index] };
     });
 
