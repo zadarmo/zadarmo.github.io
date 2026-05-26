@@ -1223,6 +1223,70 @@ body.light-theme ::selection {
   padding: 0 24px;
 }
 
+/* Tab bar — switch between parameter lanes */
+.river-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 32px;
+  padding: 0 12px;
+}
+
+.river-tab {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.river-tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.river-tab.active {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+body.light-theme .river-tab {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.45);
+}
+
+body.light-theme .river-tab:hover {
+  color: rgba(0, 0, 0, 0.8);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+body.light-theme .river-tab.active {
+  color: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 600px) {
+  .river-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 0 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .river-tab {
+    flex-shrink: 0;
+  }
+}
+
 .river-lane {
   margin-bottom: 56px;
   position: relative;
@@ -1368,6 +1432,17 @@ body.light-theme .river-card {
   padding: 10px 12px;
   flex: 1;
   -webkit-overflow-scrolling: touch;
+}
+
+/* PC: wrap to new line instead of horizontal scroll */
+@media (min-width: 601px) {
+  .river-group-cards {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    overflow-x: visible;
+    overflow-y: visible;
+    row-gap: 10px;
+  }
 }
 
 .river-group-cards::-webkit-scrollbar {

@@ -68,7 +68,8 @@
             focalLength: info.focalLength || null,
             fNumber: info.fNumber || null,
             exposureTime: info.exposureTime || null,
-            iso: info.iso || null
+            iso: info.iso || null,
+            lv: computeLV(info.fNumber, info.exposureTime, info.iso)
           };
 
           if (info.location) {
@@ -119,7 +120,8 @@
                 focalLength: info.focalLength || null,
                 fNumber: info.fNumber || null,
                 exposureTime: info.exposureTime || null,
-                iso: info.iso || null
+                iso: info.iso || null,
+                lv: computeLV(info.fNumber, info.exposureTime, info.iso)
               };
               if (info.location) locationCache[index] = info.location;
               if (info.lat != null && info.lon != null) gpsCache[index] = { lat: info.lat, lon: info.lon };
@@ -201,6 +203,13 @@
     return match[1] + '.' + match[2] + '.' + match[3] + ' ' + match[4] + ':' + match[5];
   }
 
+  // Light Value — combines aperture, shutter, ISO into a single scene-brightness number.
+  // LV = log2(N² × 100 / (t × ISO)). Higher = brighter scene.
+  function computeLV(fNumber, exposureTime, iso) {
+    if (!fNumber || !exposureTime || !iso) return null;
+    return Math.log2((fNumber * fNumber * 100) / (exposureTime * iso));
+  }
+
   /* --- River View --- */
 
   var RIVER_CONFIG = [
@@ -215,10 +224,10 @@
       affect: '影响表达 - 背景虚化',
       format: function (v) { return 'ƒ/' + (Math.round(v * 10) / 10); },
       scenes: [
-        { min: 0, max: 2.8, label: '虚化 / 人像', desc: '景深浅，背景模糊突出主体' },
-        { min: 2.8, max: 5.6, label: '旅行 / 通用', desc: '景深适中，前后兼顾' },
-        { min: 5.6, max: 11, label: '风景 / 锐利', desc: '景深大，远近都清晰' },
-        { min: 11, max: Infinity, label: '星芒 / 微距', desc: '景深极大，灯光出星芒' }
+        { min: 0, max: 2.8, label: '大光圈 / 浅景深', desc: '景深极浅，背景虚化突出主体' },
+        { min: 2.8, max: 5.6, label: '通用 / 中等景深', desc: '景深适中，前后兼顾' },
+        { min: 5.6, max: 11, label: '风景 / 最佳锐度', desc: '镜头甜蜜点，画面通透锐利' },
+        { min: 11, max: Infinity, label: '星芒 / 大景深', desc: '景深极大，点光源出星芒' }
       ]
     },
     {
@@ -235,10 +244,11 @@
         return '1/' + Math.round(1 / v) + 's';
       },
       scenes: [
-        { min: 0, max: 0.001, label: '冻结运动', desc: '凝固高速瞬间，画面锐利' },
-        { min: 0.001, max: 0.004, label: '日常 / 人物', desc: '抓拍清晰，人物不糊' },
-        { min: 0.004, max: 0.017, label: '街拍 / 手持', desc: '手持安全快门，不易模糊' },
-        { min: 0.017, max: Infinity, label: '长曝 / 夜景 / 光轨', desc: '运动物体拖影，水面雾化' }
+        { min: 0, max: 0.001, label: '高速 / 冻结运动', desc: '凝固高速瞬间，画面锐利' },
+        { min: 0.001, max: 0.004, label: '抓拍 / 一般运动', desc: '一般运动清晰，人物不糊' },
+        { min: 0.004, max: 0.017, label: '标准 / 手持安全', desc: '手持安全快门，不易模糊' },
+        { min: 0.017, max: 1, label: '慢门 / 拖影', desc: '运动物体拖影，水面雾化' },
+        { min: 1, max: Infinity, label: '长曝 / 光轨 / 星轨', desc: '灯轨成线，星轨痕迹，需三脚架' }
       ]
     },
     {
@@ -252,10 +262,10 @@
       affect: '影响画质',
       format: function (v) { return 'ISO ' + Math.round(v); },
       scenes: [
-        { min: 0, max: 200, label: '最佳画质', desc: '噪点极少，画面干净' },
-        { min: 200, max: 800, label: '阴天 / 室内', desc: '轻微噪点，日常够用' },
-        { min: 800, max: 3200, label: '暗光', desc: '噪点明显，需后期降噪' },
-        { min: 3200, max: Infinity, label: '极暗 / 演唱会', desc: '噪点重，换取更多进光' }
+        { min: 0, max: 200, label: '原生 / 极低噪点', desc: '噪点极少，画质最佳' },
+        { min: 200, max: 800, label: '低噪点', desc: '轻微噪点，日常够用' },
+        { min: 800, max: 3200, label: '可见噪点', desc: '噪点明显，需后期降噪' },
+        { min: 3200, max: Infinity, label: '高噪点 / 极限可用', desc: '噪点重，换取更多进光' }
       ]
     },
     {
@@ -269,20 +279,66 @@
       affect: '影响表达 - 视角与空间感',
       format: function (v) { return Math.round(v) + 'mm'; },
       scenes: [
-        { min: 0, max: 35, label: '风景 / 建筑', desc: '视角宽广，收纳大场景' },
-        { min: 35, max: 50, label: '街拍 / 纪实', desc: '接近人眼视角，画面自然' },
-        { min: 50, max: 85, label: '人像 / 人文', desc: '视角收窄，主体突出' },
-        { min: 85, max: 135, label: '特写 / 肖像', desc: '背景压缩，面部比例好' },
-        { min: 135, max: Infinity, label: '远摄 / 运动', desc: '拉近远处，空间压缩明显' }
+        { min: 0, max: 35, label: '超广角 / 广角', desc: '视角宽广，收纳大场景，建筑/风景' },
+        { min: 35, max: 50, label: '小广角 / 街拍', desc: '接近人眼视角，纪实经典焦段' },
+        { min: 50, max: 85, label: '标准镜头', desc: '视角自然，主体突出，通用性强' },
+        { min: 85, max: 135, label: '人像焦段', desc: '背景压缩，面部比例自然' },
+        { min: 135, max: Infinity, label: '长焦 / 远摄', desc: '拉近远处，空间压缩明显' }
+      ]
+    },
+    {
+      key: 'lv',
+      label: 'LV 曝光值',
+      unit: '',
+      gradientStart: '#0f1421',
+      gradientEnd: '#fff3b0',
+      trendLeft: '暗',
+      trendRight: '亮',
+      affect: '光圈 × 快门 × ISO 的综合 - 反映场景明暗',
+      format: function (v) { return 'LV ' + (Math.round(v * 10) / 10); },
+      scenes: [
+        { min: -Infinity, max: 4,  label: '夜景 / 极暗光',   desc: '街灯、月光、烛光，需高 ISO 或长曝' },
+        { min: 4,         max: 8,  label: '室内 / 弱光',     desc: '常见室内灯光、展厅、商店' },
+        { min: 8,         max: 11, label: '阴天 / 室内强光', desc: '阴雨天、明亮室内、靠窗位置' },
+        { min: 11,        max: 14, label: '多云 / 阴影日光', desc: '多云天、阴影下的日光' },
+        { min: 14,        max: Infinity, label: '晴天 / 强光',  desc: '强烈日光、亮沙滩、雪地' }
       ]
     }
   ];
+
+  var RIVER_TABS = [
+    { key: 'focalLength',  label: '焦距' },
+    { key: 'fNumber',      label: '光圈' },
+    { key: 'exposureTime', label: '快门' },
+    { key: 'iso',          label: 'ISO' },
+    { key: 'lv',           label: 'LV 曝光值' },
+    { key: 'tone',         label: '影调' },
+    { key: 'saturation',   label: '饱和度' }
+  ];
+  var RIVER_DEFAULT_TAB = 'focalLength';
+
+  function setActiveRiverLane(container, key) {
+    container.querySelectorAll('.river-tab').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.laneKey === key);
+    });
+    container.querySelectorAll('.river-lane').forEach(function (lane) {
+      lane.style.display = lane.dataset.laneKey === key ? '' : 'none';
+    });
+  }
 
   function buildRiverView() {
     var container = document.getElementById('river-container');
     if (!container) return;
 
     var html = '';
+
+    // Tab bar
+    html += '<div class="river-tabs">';
+    RIVER_TABS.forEach(function (tab) {
+      var active = tab.key === RIVER_DEFAULT_TAB ? ' active' : '';
+      html += '<button class="river-tab' + active + '" data-lane-key="' + tab.key + '">' + tab.label + '</button>';
+    });
+    html += '</div>';
 
     RIVER_CONFIG.forEach(function (river) {
       // Collect all photos that have this parameter
@@ -299,7 +355,7 @@
 
       if (photos.length === 0) return;
 
-      html += '<div class="river-lane">';
+      html += '<div class="river-lane" data-lane-key="' + river.key + '">';
       html += '<div class="river-header">';
       html += '<span class="river-label">' + river.label + '</span>';
       html += '<span class="river-trend">';
@@ -320,7 +376,7 @@
 
       // Render each scene group
       river.scenes.forEach(function (scene) {
-        var rangeText = river.format(scene.min) + ' ~ ' + (scene.max === Infinity ? '∞' : river.format(scene.max));
+        var rangeText = (scene.min === -Infinity ? '−∞' : river.format(scene.min)) + ' ~ ' + (scene.max === Infinity ? '∞' : river.format(scene.max));
 
         // Find matching photos in this scene range
         var matched = photos.filter(function (p) {
@@ -356,7 +412,10 @@
     });
 
     // Tone lane placeholder — will be filled async
-    html += '<div class="river-lane river-lane--tone" id="river-tone-lane"></div>';
+    html += '<div class="river-lane river-lane--tone" data-lane-key="tone" id="river-tone-lane"></div>';
+
+    // Saturation lane placeholder — will be filled async
+    html += '<div class="river-lane river-lane--saturation" data-lane-key="saturation" id="river-saturation-lane"></div>';
 
     // Source attribution
     html += '<div class="river-source">';
@@ -369,6 +428,16 @@
 
     container.innerHTML = html;
 
+    // Initial lane visibility — only default tab visible
+    setActiveRiverLane(container, RIVER_DEFAULT_TAB);
+
+    // Tab switching
+    container.querySelectorAll('.river-tab').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setActiveRiverLane(container, btn.dataset.laneKey);
+      });
+    });
+
     // Bind click events — open lightbox with color grading
     container.querySelectorAll('.river-card').forEach(function (el) {
       el.addEventListener('click', function () {
@@ -379,6 +448,9 @@
 
     // Build tone analysis asynchronously
     buildToneLane();
+
+    // Build HSV saturation analysis asynchronously
+    buildSaturationLane();
   }
 
   /* --- Tone Analysis (影调) — histogram-based --- */
@@ -554,6 +626,125 @@
         }
 
         toneLane.appendChild(groupEl);
+      });
+    });
+  }
+
+  /* --- HSV Saturation Lane (饱和度) — two rows: 0~0.5 and 0.5~1 --- */
+
+  var SATURATION_GROUPS = [
+    { key: 'low',  label: '低饱和 0 ~ 0.5', desc: '柔和、素雅、克制', range: [0, 0.5] },
+    { key: 'high', label: '高饱和 0.5 ~ 1', desc: '浓郁、鲜明、热烈', range: [0.5, 1.0001] }
+  ];
+
+  function computeImageSaturationFromImg(img) {
+    if (!img || !img.naturalWidth) return null;
+    var canvas = document.createElement('canvas');
+    var side = 50;
+    canvas.width = side;
+    canvas.height = side;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, side, side);
+    var data = ctx.getImageData(0, 0, side, side).data;
+    var totalSat = 0, count = 0;
+    for (var i = 0; i < data.length; i += 16) {
+      var r = data[i] / 255, g = data[i+1] / 255, b = data[i+2] / 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      if (max === min) continue;
+      var sat = (max - min) / max;
+      totalSat += sat;
+      count++;
+    }
+    return count > 0 ? totalSat / count : 0;
+  }
+
+  function buildSaturationLane() {
+    var satLane = document.getElementById('river-saturation-lane');
+    if (!satLane) return;
+
+    var headerHtml =
+      '<div class="river-header">' +
+        '<span class="river-label">饱和度</span>' +
+        '<span class="river-trend">' +
+          '<span class="river-trend-endpoint"><span class="river-trend-num">低</span><span class="river-trend-feel">素雅</span></span>' +
+          '<span class="river-trend-arrow"></span>' +
+          '<span class="river-trend-endpoint"><span class="river-trend-num">高</span><span class="river-trend-feel">浓郁</span></span>' +
+        '</span>' +
+        '<span class="river-affect">影响表达 - 色彩浓度与情绪强度 · 基于 HSV·S 通道</span>' +
+      '</div>';
+
+    satLane.innerHTML = headerHtml + '<div class="tone-loading">分析图片HSV饱和度中…</div>';
+
+    var tasks = PHOTOS.map(function (filename, index) {
+      var src = getThumbSrc(filename);
+      return loadImageForTone(src).then(function (img) {
+        if (!img) return null;
+        var sat = computeImageSaturationFromImg(img);
+        if (sat == null) return null;
+        hsvSatCache[index] = sat;
+        return { filename: filename, index: index, saturation: sat };
+      });
+    });
+
+    Promise.all(tasks).then(function (results) {
+      var photos = results.filter(function (r) { return r !== null; });
+
+      satLane.innerHTML = headerHtml;
+
+      SATURATION_GROUPS.forEach(function (group) {
+        var matched = photos.filter(function (p) {
+          return p.saturation >= group.range[0] && p.saturation < group.range[1];
+        });
+        matched.sort(function (a, b) { return a.saturation - b.saturation; });
+
+        var groupEl = document.createElement('div');
+        groupEl.className = 'river-group';
+
+        var groupHeaderHtml =
+          '<div class="river-group-header">' +
+            '<span class="river-group-range">' + group.label + '</span>' +
+            '<span class="river-group-desc">' + group.desc + '</span>' +
+            '<span class="river-group-label">' + matched.length + ' 张</span>' +
+          '</div>';
+        groupEl.innerHTML = groupHeaderHtml;
+
+        if (matched.length > 0) {
+          var cardsContainer = document.createElement('div');
+          cardsContainer.className = 'river-group-cards';
+
+          matched.forEach(function (photo) {
+            var thumbSrc = getThumbSrc(photo.filename);
+            var card = document.createElement('div');
+            card.className = 'river-card';
+            card.setAttribute('data-index', photo.index);
+
+            var imgEl = document.createElement('img');
+            imgEl.src = thumbSrc;
+            imgEl.alt = 'Photo';
+            imgEl.loading = 'lazy';
+            card.appendChild(imgEl);
+
+            var label = document.createElement('div');
+            label.className = 'river-card-label';
+            label.textContent = photo.saturation.toFixed(2);
+            card.appendChild(label);
+
+            card.addEventListener('click', function () {
+              openRiverLightbox(photo.index);
+            });
+
+            cardsContainer.appendChild(card);
+          });
+
+          groupEl.appendChild(cardsContainer);
+        } else {
+          var emptyEl = document.createElement('div');
+          emptyEl.className = 'river-group-empty';
+          emptyEl.textContent = '暂无照片';
+          groupEl.appendChild(emptyEl);
+        }
+
+        satLane.appendChild(groupEl);
       });
     });
   }
