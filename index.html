@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="/css/color-grading.css">
   <link rel="stylesheet" href="/css/music.css">
   <link rel="stylesheet" href="/css/travel.css">
-  <link rel="stylesheet" href="/css/china-map.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
@@ -30,7 +29,6 @@
           <button class="dropdown-item" data-theme="design"><span class="dropdown-item-icon">🎨</span>设计</button>
           <button class="dropdown-item" data-theme="reading"><span class="dropdown-item-icon">📖</span>阅读</button>
           <button class="dropdown-item" data-theme="travel"><span class="dropdown-item-icon">✈️</span>旅行</button>
-          <button class="dropdown-item" data-theme="china-map"><span class="dropdown-item-icon">🗺️</span>版图</button>
         </div>
       </div>
     </div>
@@ -118,55 +116,6 @@
   </div>
 
 
-  <!-- China Map View -->
-  <div class="view view-china-map">
-    <div class="china-map-page">
-      <header class="china-map-header">
-        <h2 class="china-map-title">华夏版图</h2>
-          <p class="china-map-sub">WGS84 经纬度 · 与夜色融为一体的山河轮廓</p>
-        <div class="china-map-tabs">
-          <button class="china-map-tab active" data-tab="map">地图</button>
-          <button class="china-map-tab" data-tab="location">照片位置</button>
-        </div>
-      </header>
-
-      <div id="china-map-svg-view" class="china-map-subview active">
-        <div class="china-map-stage">
-          <div class="china-map-aurora" aria-hidden="true"></div>
-          <svg class="china-map-svg" id="china-map-svg" role="img"></svg>
-          <p class="china-map-coord-readout" id="china-map-coord" aria-live="polite">移动鼠标查看经纬度</p>
-        </div>
-        <aside class="china-map-panel" id="china-map-panel" aria-live="polite">
-          <p class="china-map-panel-name">中国</p>
-          <p class="china-map-panel-hint">悬停查看省名与坐标</p>
-          <p class="china-map-panel-coord"></p>
-        </aside>
-      </div>
-
-      <div id="china-map-location-view" class="china-map-subview">
-        <div id="china-map-photo-map"></div>
-      </div>
-
-      <!-- Photo lightbox for map markers -->
-      <div class="lightbox" id="map-photo-lightbox" style="display:none;">
-        <button class="lightbox-close" id="map-lb-close" aria-label="关闭">×</button>
-        <button class="lightbox-prev" id="map-lb-prev" aria-label="上一张">‹</button>
-        <button class="lightbox-next" id="map-lb-next" aria-label="下一张">›</button>
-        <div class="lightbox-content">
-          <img class="lightbox-img" id="map-lb-img" src="" alt="">
-          <div class="lightbox-caption" id="map-lb-caption"></div>
-        </div>
-        <div class="lightbox-thumbs" id="map-lb-thumbs"></div>
-      </div>
-
-      <!-- Photo hover tooltip -->
-      <div class="map-photo-tooltip" id="map-photo-tooltip" style="display:none;">
-        <img id="map-tooltip-img" src="" alt="">
-        <div class="map-tooltip-info" id="map-tooltip-info"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- Travel View -->
   <div class="view view-travel">
     <div class="travel-page">
@@ -195,9 +144,18 @@
             </thead>
             <tbody id="travel-log-body">
               <tr>
+                <td data-label="时间">2026.05</td>
+                <td data-label="Vlog">
+                  <button type="button" class="travel-log-link js-travel-vlog" data-bvid="BV1RCL86JE7u">新疆 · 观看</button>
+                </td>
+                <td data-label="图片合集"><span class="travel-log-muted">待补充</span></td>
+                <td data-label="攻略"><span class="travel-log-muted">待补充</span></td>
+                <td data-label="感受"><span class="travel-log-muted">待补充</span></td>
+              </tr>
+              <tr>
                 <td data-label="时间">2026.04</td>
                 <td data-label="Vlog">
-                  <button type="button" class="travel-log-link js-travel-vlog">新西兰 · 观看</button>
+                  <button type="button" class="travel-log-link js-travel-vlog" data-bvid="BV1ty576TE8R">新西兰 · 观看</button>
                 </td>
                 <td data-label="图片合集">
                   <button type="button" class="travel-log-link js-travel-gallery">摄影 · 新西兰</button>
@@ -367,7 +325,6 @@
   <script src="/js/color-grading.js"></script>
   <script src="/js/gallery.js"></script>
   <script src="/js/music.js"></script>
-  <script src="/js/china-map.js"></script>
   <script src="/js/travel.js"></script>
 </body>
 </html>

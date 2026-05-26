@@ -26,20 +26,23 @@
   /* Expose for theme switcher */
   window.initTravelAnimations = initTravelAnimations;
 
-  var VLOG_SRC = '//player.bilibili.com/player.html?bvid=BV1ty576TE8R&page=1&autoplay=1&high_quality=1';
+  var DEFAULT_BVID = 'BV1ty576TE8R';
 
-  function openTravelVlog() {
+  function openTravelVlog(bvid) {
     var overlay = document.getElementById('vlog-overlay');
     var iframe = document.getElementById('vlog-iframe');
     if (!overlay || !iframe) return;
-    iframe.src = VLOG_SRC;
+    var id = bvid || DEFAULT_BVID;
+    iframe.src = '//player.bilibili.com/player.html?bvid=' + id + '&page=1&autoplay=1&high_quality=1';
     overlay.classList.add('active');
     document.body.classList.add('lightbox-open');
   }
 
   function initTravelLogActions() {
     document.querySelectorAll('.js-travel-vlog').forEach(function (btn) {
-      btn.addEventListener('click', openTravelVlog);
+      btn.addEventListener('click', function () {
+        openTravelVlog(btn.getAttribute('data-bvid'));
+      });
     });
 
     document.querySelectorAll('.js-travel-gallery').forEach(function (btn) {
