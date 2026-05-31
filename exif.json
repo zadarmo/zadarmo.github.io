@@ -7,6 +7,17 @@
     "exposureTime": 0.017857142857142856,
     "iso": 250
   },
+  "IMG_20250817_205420.jpg": {
+    "device": "",
+    "dateTime": "2025-08-17 20:41:48",
+    "focalLength": 70,
+    "fNumber": 2.6,
+    "exposureTime": 0.04,
+    "iso": 376,
+    "lat": 39.15586,
+    "lon": 117.80756,
+    "location": "📍 中国 · 天津市"
+  },
   "IMG_20251006_064812.jpg": {
     "device": "",
     "dateTime": "2025-10-06 06:48:12"
@@ -135,6 +146,28 @@
     "device": "",
     "dateTime": "2025-10-19 13:12:43"
   },
+  "IMG_20251231_121741.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2025-12-31 12:17:41",
+    "focalLength": 50,
+    "fNumber": 4.0,
+    "exposureTime": 0.008076,
+    "iso": 71,
+    "lat": 24.456475,
+    "lon": 118.074161,
+    "location": "📍 中国 · 福建省 · 厦门岛"
+  },
+  "IMG_20260101_122849.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-01-01 12:28:49",
+    "focalLength": 85,
+    "fNumber": 4.0,
+    "exposureTime": 0.003759,
+    "iso": 50,
+    "lat": 24.438181,
+    "lon": 118.092003,
+    "location": "📍 中国 · 福建省 · 厦门岛"
+  },
   "IMG_20260102_074142.jpg": {
     "device": "vivo X200 Pro",
     "dateTime": "2026-01-02 07:41:42",
@@ -145,6 +178,28 @@
     "lat": 24.451686,
     "lon": 118.062964,
     "location": "📍 中国 · 福建省 · 厦门港"
+  },
+  "IMG_20260102_075015.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-01-02 07:50:15",
+    "focalLength": 85,
+    "fNumber": 4.0,
+    "exposureTime": 0.01,
+    "iso": 374,
+    "lat": 24.451369,
+    "lon": 118.061958,
+    "location": "📍 中国 · 福建省 · 厦门市"
+  },
+  "IMG_20260102_082806.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-01-02 08:28:06",
+    "focalLength": 62,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 240,
+    "lat": 24.445886,
+    "lon": 118.061636,
+    "location": "📍 中国 · 福建省 · 厦门市"
   },
   "IMG_20260102_091001.jpg": {
     "device": "vivo X200 Pro",
@@ -846,6 +901,193 @@
     "lat": 39.909381,
     "lon": 116.272139,
     "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_150928.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 15:09:28",
+    "focalLength": 40,
+    "fNumber": 1.6,
+    "exposureTime": 0.02,
+    "iso": 227,
+    "lat": 39.982969,
+    "lon": 116.458972,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_161356.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 16:13:56",
+    "focalLength": 66,
+    "fNumber": 1.6,
+    "exposureTime": 0.016666,
+    "iso": 420,
+    "lat": 39.982989,
+    "lon": 116.459169,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_161817.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 16:18:17",
+    "focalLength": 138,
+    "fNumber": 2.7,
+    "exposureTime": 0.020833,
+    "iso": 538,
+    "lat": 39.98295,
+    "lon": 116.459239,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_170421.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 17:04:21",
+    "focalLength": 87,
+    "fNumber": 2.7,
+    "exposureTime": 0.003838,
+    "iso": 50,
+    "lat": 39.980136,
+    "lon": 116.456331,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_224142.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 14:10:36",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 196,
+    "lat": 39.983081,
+    "lon": 116.459058,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_224244.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 14:25:13",
+    "focalLength": 129,
+    "fNumber": 2.7,
+    "exposureTime": 0.02,
+    "iso": 337,
+    "lat": 39.983203,
+    "lon": 116.459017,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_224449.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 14:30:49",
+    "focalLength": 33,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 124,
+    "lat": 39.983072,
+    "lon": 116.459075,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_224925.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 16:27:25",
+    "focalLength": 35,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 418,
+    "lat": 39.983072,
+    "lon": 116.459072,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260530_225439.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 17:00:16",
+    "focalLength": 63,
+    "fNumber": 1.6,
+    "exposureTime": 0.0007,
+    "iso": 71,
+    "lat": 39.980075,
+    "lon": 116.458156,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260531_111658.jpg": {
+    "device": "vivo X200 Pro",
+    "dateTime": "2026-05-30 14:35:13",
+    "focalLength": 46,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 490,
+    "lat": 39.983064,
+    "lon": 116.459056,
+    "location": "📍 中国 · 北京市"
+  },
+  "IMG_20260531_115437.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2024-09-19 09:34:22",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.0007,
+    "iso": 50,
+    "lat": "39.130410",
+    "lon": "117.217084",
+    "location": "📍 中国 · 天津市"
+  },
+  "IMG_20260531_120135.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-08-17 14:28:12",
+    "focalLength": 16,
+    "fNumber": 2.2,
+    "exposureTime": 0.01,
+    "iso": 64,
+    "lat": "39.135094",
+    "lon": "117.199226",
+    "location": "📍 中国 · 天津市"
+  },
+  "IMG_20260531_140136.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-07-12 19:59:44",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.001,
+    "iso": 50,
+    "lat": 41.5418,
+    "lon": 113.1563,
+    "location": "📍 中国 · 内蒙古自治区 · 乌兰察布市"
+  },
+  "IMG_20260531_140326.jpg": {
+    "device": "",
+    "dateTime": "2025-07-13 19:39:35",
+    "focalLength": 91,
+    "fNumber": 2.7,
+    "exposureTime": 0.01,
+    "iso": 81,
+    "lat": 41.5702,
+    "lon": 113.1395,
+    "location": "📍 中国 · 内蒙古自治区 · 乌兰察布市"
+  },
+  "IMG_20260531_140435.jpg": {
+    "device": "",
+    "dateTime": "2025-07-13 00:56:08",
+    "focalLength": 83,
+    "fNumber": 2.6,
+    "exposureTime": 0.02,
+    "iso": 192,
+    "lat": 41.5621,
+    "lon": 113.1487,
+    "location": "📍 中国 · 内蒙古自治区 · 乌兰察布市"
+  },
+  "mmexport1752339312261.jpg": {
+    "device": "",
+    "dateTime": "2025-07-13 00:55:12",
+    "focalLength": 74,
+    "fNumber": 2.0,
+    "exposureTime": 0.006819613,
+    "iso": 50,
+    "lat": 41.5612,
+    "lon": 113.1475,
+    "location": "📍 中国 · 内蒙古自治区 · 乌兰察布市"
+  },
+  "mmexport1752339384927.jpg": {
+    "device": "",
+    "dateTime": "2025-07-13 00:56:24",
+    "focalLength": 79,
+    "fNumber": 5.6,
+    "exposureTime": 0.004,
+    "iso": 110,
+    "lat": 41.4835,
+    "lon": 113.1842,
+    "location": "📍 中国 · 内蒙古自治区 · 乌兰察布市"
   },
   "mmexport1759840935351.jpg": {},
   "mmexport1759840940096.jpg": {}
