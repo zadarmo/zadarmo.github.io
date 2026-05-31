@@ -7,6 +7,17 @@
     "exposureTime": 0.017857142857142856,
     "iso": 250
   },
+  "IMG_20231231_182057.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2023-12-31 18:20:57",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.04,
+    "iso": 2031,
+    "lat": 29.5648,
+    "lon": 106.5872,
+    "location": "📍 中国 · 重庆市 · 重庆主城都市区"
+  },
   "IMG_20250428_165456.jpg": {
     "device": "Xiaomi 23013RK75C",
     "dateTime": "2025-04-28 16:54:56",
@@ -28,6 +39,50 @@
     "lat": 30.97,
     "lon": 101.1345,
     "location": "📍 中国 · 四川省 · 甘孜藏族自治州"
+  },
+  "IMG_20250603_165222.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-03 16:52:22",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.003224532,
+    "iso": 50,
+    "lat": 34.6708,
+    "lon": 135.5002,
+    "location": "📍 日本 · 大阪府 · 大阪市"
+  },
+  "IMG_20250604_113911.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-04 11:39:11",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.016666667,
+    "iso": 246,
+    "lat": 34.6664,
+    "lon": 135.4323,
+    "location": "📍 日本 · 大阪府 · 大阪市"
+  },
+  "IMG_20250607_135600.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-07 13:56:00",
+    "focalLength": 16,
+    "fNumber": 2.2,
+    "exposureTime": 0.012032816,
+    "iso": 51,
+    "lat": 34.6661,
+    "lon": 135.4318,
+    "location": "📍 日本 · 大阪府 · 大阪市"
+  },
+  "IMG_20250608_094758.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-08 09:47:58",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.001019175,
+    "iso": 50,
+    "lat": 35.4156,
+    "lon": 138.8644,
+    "location": "📍 日本 · 山梨縣 · 富士箱根伊豆國立公園"
   },
   "IMG_20250817_205420.jpg": {
     "device": "",
@@ -1176,6 +1231,35 @@
     "lon": 95.2617,
     "location": "📍 中国 · 青海省 · 海西蒙古族藏族自治州"
   },
+  "IMG_20260531_201421.jpg": {
+    "device": "",
+    "dateTime": "2025-04-25 15:43:41",
+    "focalLength": 23,
+    "fNumber": 1.6,
+    "exposureTime": 0.01,
+    "iso": 64,
+    "lat": 31.0268,
+    "lon": 109.6247,
+    "location": "📍 中国 · 重庆市 · 巫山县"
+  },
+  "IMG_20260531_202218.jpg": {
+    "device": "",
+    "dateTime": "2025-06-08 09:22:18",
+    "lat": 35.2983,
+    "lon": 138.8145,
+    "location": "📍 日本 · 靜岡縣 · 御殿場市"
+  },
+  "IMG_20260531_203104.jpg": {
+    "device": "Xiaomi 23013RK75C",
+    "dateTime": "2025-06-05 08:33:56",
+    "focalLength": 25,
+    "fNumber": 1.8,
+    "exposureTime": 0.0035,
+    "iso": 50,
+    "lat": 34.6851,
+    "lon": 135.8392,
+    "location": "📍 日本 · 奈良縣 · 奈良公園"
+  },
   "mmexport1744690194330.jpg": {
     "device": "",
     "dateTime": "2025-04-15 12:09:54",
@@ -1242,6 +1326,58 @@
     "lat": 30.3272,
     "lon": 101.461,
     "location": "📍 中国 · 四川省 · 甘孜藏族自治州"
+  },
+  "mmexport1748969789119.jpg": {
+    "device": "",
+    "dateTime": "2025-06-04 01:56:29",
+    "focalLength": 34,
+    "fNumber": 1.6,
+    "exposureTime": 0.03,
+    "iso": 800,
+    "lat": 34.6752,
+    "lon": 135.5145,
+    "location": "📍 日本 · 大阪府 · 大阪市"
+  },
+  "mmexport1749050677176.jpg": {
+    "dateTime": "2025-06-04 12:40:02",
+    "lat": 34.6664,
+    "lon": 135.4323,
+    "location": "📍 日本 · 大阪府 · 大阪市"
+  },
+  "mmexport1749167484861.jpg": {
+    "dateTime": "2025-06-06 07:51:24",
+    "lat": 34.6822,
+    "lon": 135.8297,
+    "location": "📍 日本 · 奈良縣 · 奈良公園"
+  },
+  "mmexport1749474242456.jpg": {
+    "dateTime": "2025-06-09 15:41:02",
+    "lat": 35.3027,
+    "lon": 139.4719,
+    "location": "📍 日本 · 神奈川縣 · 相模灣"
+  },
+  "mmexport1749474255532.jpg": {
+    "dateTime": "2025-06-09 14:23:02",
+    "lat": 35.6826,
+    "lon": 139.7272,
+    "location": "📍 日本 · 東京都 · 日本特別區"
+  },
+  "mmexport1749521588458.jpg": {
+    "device": "",
+    "dateTime": "2025-06-10 11:13:08",
+    "focalLength": 23,
+    "fNumber": 1.6,
+    "exposureTime": 0.002195749000511238,
+    "iso": 50,
+    "lat": 35.6826,
+    "lon": 139.7272,
+    "location": "📍 日本 · 東京都 · 日本特別區"
+  },
+  "mmexport1750815646300.jpg": {
+    "dateTime": "2025-06-25 09:40:46",
+    "lat": 29.5986,
+    "lon": 106.3074,
+    "location": "📍 中国 · 重庆市 · 重庆主城都市区"
   },
   "mmexport1752339312261.jpg": {
     "device": "",
