@@ -642,3 +642,120 @@ body.light-theme .heritage-tag {
   color: rgba(146, 64, 14, 0.85);
 }
 
+/* ============================================
+   吉他板块
+   ============================================ */
+.music-section--guitar {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 72px;
+}
+
+body.light-theme .music-section--guitar {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+
+.guitar-block {
+  margin-top: 24px;
+}
+
+.guitar-block-title {
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+  padding-left: 12px;
+  border-left: 3px solid rgba(251, 146, 60, 0.6);
+}
+
+body.light-theme .guitar-block-title {
+  color: rgba(0, 0, 0, 0.72);
+  border-left-color: rgba(234, 88, 12, 0.5);
+}
+
+.guitar-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .guitar-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.guitar-col {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+body.light-theme .guitar-col {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.guitar-col-title {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: rgba(251, 146, 60, 0.85);
+  letter-spacing: 0.06em;
+  margin: 0 0 10px;
+}
+
+body.light-theme .guitar-col-title {
+  color: rgba(234, 88, 12, 0.85);
+}
+
+.guitar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.guitar-list li {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.48);
+  line-height: 1.75;
+  padding: 3px 0 3px 10px;
+  position: relative;
+}
+
+.guitar-list li::before {
+  content: '\B7';
+  position: absolute;
+  left: 0;
+  color: rgba(251, 146, 60, 0.5);
+  font-weight: bold;
+}
+
+.guitar-list li b {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 500;
+}
+
+body.light-theme .guitar-list li {
+  color: rgba(0, 0, 0, 0.48);
+}
+
+body.light-theme .guitar-list li::before {
+  color: rgba(234, 88, 12, 0.5);
+}
+
+body.light-theme .guitar-list li b {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.guitar-col-tip {
+  margin: 8px 0 0;
+  font-size: 0.65rem;
+  color: rgba(251, 146, 60, 0.55);
+  font-style: italic;
+}
+
+body.light-theme .guitar-col-tip {
+  color: rgba(180, 83, 9, 0.65);
+}
+
